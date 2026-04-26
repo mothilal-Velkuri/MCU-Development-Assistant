@@ -2,8 +2,6 @@ Phase 3 LLM prompt
 has folllowing steps; 
 llm\prompts.py    ← Step 1  (system prompts for each workflow step)
 llm\client.py     ← Step 2  (Ollama API wrapper)
-test_prompts.py   ← Step 3
-test_client.py    ← Step 4
 
 **Step 1:**  **prompts.py**
   create prompts.py file under llm and copy below script.
