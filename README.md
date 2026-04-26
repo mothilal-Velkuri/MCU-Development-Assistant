@@ -1,5 +1,6 @@
 # MCU-Development-Assistant
 Driver development using LLM
+
   **part 1:**
         installation of anaconda and relevant packages.
         MiniConda installation: download path
@@ -88,14 +89,14 @@ Driver development using LLM
         look for alternate version and fix it.
 
     **Step 6:**
-    add the API_KEY.
-    echo ANTHROPIC_API_KEY=your_key_here > .env
-    it will create a .env file and in this replace "your_key_here" with you claude key.
-    **Step 7**
-    finally check for all installed corectly or nit with below command.
-    python -c "import pdfplumber; import chromadb; import anthropic; import rich; print('ALL PACKAGES OK')" 
-    it should print "ALL PACKAGES OK"
-    
+     add the API_KEY.
+     echo ANTHROPIC_API_KEY=your_key_here > .env
+     it will create a .env file and in this replace "your_key_here" with you claude key.
+     **Step 7**
+     finally check for all installed corectly or nit with below command.
+     python -c "import pdfplumber; import chromadb; import anthropic; import rich; print('ALL PACKAGES OK')" 
+     it should print "ALL PACKAGES OK"
+     
 
 
 
