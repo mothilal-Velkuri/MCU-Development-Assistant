@@ -1,0 +1,5 @@
+Phase 5 include following steps
+output\formatter.py    ← Step 1  (formats Q&A answers for terminal)
+output\code_writer.py  ← Step 2  (saves generated C code to files)
+
+Step 1:
