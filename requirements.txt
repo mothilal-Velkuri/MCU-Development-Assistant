@@ -1,0 +1,9 @@
+pdfplumber==0.11.0 
+sentence-transformers==3.0.1 
+chromadb==0.5.3 
+anthropic==0.34.0 
+python-dotenv==1.0.1 
+rich==13.7.1 
+transformers==4.41.0 
+numpy==1.26.4 
+requests==2.32.3 

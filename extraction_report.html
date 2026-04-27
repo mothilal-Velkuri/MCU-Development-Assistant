@@ -1,0 +1,3980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Extraction Visual Report — STM32F407_ERRATE.pdf</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 {
+    color: #4ec9b0;
+    border-bottom: 2px solid #4ec9b0;
+    padding-bottom: 8px;
+  }
+  h2 {
+    color: #dcdcaa;
+    margin-top: 40px;
+    border-left: 4px solid #dcdcaa;
+    padding-left: 10px;
+  }
+  h3 {
+    color: #9cdcfe;
+    margin-top: 24px;
+  }
+  .summary-box {
+    background: #252526;
+    border: 1px solid #3e3e42;
+    border-radius: 6px;
+    padding: 16px 24px;
+    margin: 16px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat .num {
+    font-size: 2em;
+    font-weight: bold;
+    color: #4ec9b0;
+  }
+  .stat .lbl {
+    font-size: 0.85em;
+    color: #858585;
+    margin-top: 4px;
+  }
+  .page-block {
+    background: #252526;
+    border: 1px solid #3e3e42;
+    border-radius: 6px;
+    margin: 12px 0;
+    overflow: hidden;
+  }
+  .page-header {
+    background: #2d2d30;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3e3e42;
+  }
+  .page-num {
+    font-weight: bold;
+    color: #4ec9b0;
+    font-size: 1em;
+  }
+  .badges {
+    display: flex;
+    gap: 6px;
+  }
+  .badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+  }
+  .badge-text   { background:#1a4a3a; color:#4ec9b0; }
+  .badge-table  { background:#4a3a1a; color:#dcdcaa; }
+  .badge-notext { background:#3a1a1a; color:#f48771; }
+  .page-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .text-panel {
+    padding: 12px 16px;
+    border-right: 1px solid #3e3e42;
+  }
+  .table-panel {
+    padding: 12px 16px;
+  }
+  .panel-label {
+    font-size: 11px;
+    color: #858585;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .raw-text {
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    background: #1a1a1a;
+    padding: 10px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 200px;
+    overflow-y: auto;
+    color: #ce9178;
+    border: 1px solid #3e3e42;
+  }
+  table.extracted {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+  table.extracted th {
+    background: #3a3a3a;
+    color: #dcdcaa;
+    padding: 5px 8px;
+    border: 1px solid #555;
+    text-align: left;
+  }
+  table.extracted td {
+    padding: 4px 8px;
+    border: 1px solid #3e3e42;
+    color: #d4d4d4;
+    vertical-align: top;
+    max-width: 200px;
+    word-break: break-word;
+  }
+  table.extracted tr:nth-child(even) td {
+    background: #2a2a2a;
+  }
+  .merged-cell {
+    background: #2d2d50 !important;
+    color: #9cdcfe;
+    font-style: italic;
+  }
+  .empty-cell {
+    color: #555;
+    font-style: italic;
+  }
+  .no-table {
+    color: #555;
+    font-style: italic;
+    font-size: 12px;
+  }
+  .chunk-block {
+    background: #252526;
+    border: 1px solid #3e3e42;
+    border-radius: 6px;
+    margin: 8px 0;
+    overflow: hidden;
+  }
+  .chunk-header {
+    background: #2d2d30;
+    padding: 6px 14px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #3e3e42;
+    font-size: 12px;
+  }
+  .chunk-text {
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    padding: 10px 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #ce9178;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  .chunk-has-table { border-left: 3px solid #dcdcaa; }
+  .chunk-has-errata { border-left: 3px solid #f48771; }
+  .chunk-normal { border-left: 3px solid #4ec9b0; }
+  .nav {
+    position: sticky;
+    top: 0;
+    background: #1e1e1e;
+    padding: 8px 0;
+    border-bottom: 1px solid #3e3e42;
+    margin-bottom: 20px;
+    z-index: 100;
+  }
+  .nav a {
+    color: #4ec9b0;
+    text-decoration: none;
+    margin-right: 20px;
+    font-size: 13px;
+  }
+  .nav a:hover { text-decoration: underline; }
+  .warning {
+    background: #3a2a1a;
+    border: 1px solid #dcdcaa;
+    border-radius: 4px;
+    padding: 10px 16px;
+    margin: 8px 0;
+    font-size: 12px;
+    color: #dcdcaa;
+  }
+  .ok {
+    background: #1a3a2a;
+    border: 1px solid #4ec9b0;
+    border-radius: 4px;
+    padding: 10px 16px;
+    margin: 8px 0;
+    font-size: 12px;
+    color: #4ec9b0;
+  }
+  .section-stats {
+    font-size: 12px;
+    color: #858585;
+    margin-bottom: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="#summary">Summary</a>
+  <a href="#pages">Page Extraction</a>
+  <a href="#tables">Raw Tables</a>
+  <a href="#chunks">Chunks</a>
+  <a href="#errata">Errata Chunks</a>
+</div>
+
+<h1>📄 Extraction Visual Report</h1>
+<p style="color:#858585;">
+  File: <strong style="color:#9cdcfe;">STM32F407_ERRATE.pdf</strong>
+  &nbsp;|&nbsp; Type: <strong style="color:#9cdcfe;">Errata</strong>
+  &nbsp;|&nbsp; Generated by test_visual_inspection.py
+</p>
+
+<h2 id="summary">📊 Summary</h2>
+<div class="summary-box">
+  <div class="stat">
+    <div class="num">46</div>
+    <div class="lbl">Pages Extracted</div>
+  </div>
+  <div class="stat">
+    <div class="num">61</div>
+    <div class="lbl">Raw Tables Found</div>
+  </div>
+  <div class="stat">
+    <div class="num">344</div>
+    <div class="lbl">Total Chunks</div>
+  </div>
+  <div class="stat">
+    <div class="num">212</div>
+    <div class="lbl">Errata Chunks</div>
+  </div>
+</div>
+
+<h2 id="pages">📃 Page-by-Page Extraction</h2>
+<div class="section-stats">
+  Showing all 46 pages — 
+  left panel: extracted text | right panel: extracted tables
+</div>
+
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 1</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2245 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Errata sheet
+STM32F405/407xx and STM32F415/417xx device errata
+Applicability
+This document applies to the part numbers of STM32F405/407xx and STM32F415/417xx devices and the device variants as
+stated in this page.
+It gives a summary and a description of the device errata, with respect to the device datasheet and reference manual RM0090.
+Deviation of the real device behavior from the intended device behavior is considered to be a device limitation. Deviation of the
+description in the reference manual or the datasheet from the intended device behavior is consi</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (3 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Reference</th><th>Part numbers</th></tr>
+<tr><td>STM32F405xx</td><td>STM32F405OG, STM32F405OE, STM32F405RG, STM32F405VG, STM32F405ZG</td></tr>
+<tr><td>STM32F407xx</td><td>STM32F407IG, STM32F407VG, STM32F407ZG, STM32F407ZE, STM32F407IE, STM32F407VE</td></tr>
+<tr><td>STM32F415xx</td><td>STM32F415OG, STM32F415RG, STM32F415VG, STM32F415ZG</td></tr>
+<tr><td>STM32F417xx</td><td>STM32F417VG, STM32F417IG, STM32F417ZG, STM32F417VE, STM32F417ZE, STM32F417IE</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>Silicon revision codes</th></tr>
+<tr><td>Reference</td><td>Device marking(1)</td><td>REV_ID(2)</td></tr>
+<tr><td>STM32F405xx, STM32F407xx,</td></tr>
+<tr><td>STM32F415xx, STM32F417xx</td><td class="merged-cell">A</td><td>0x1000</td></tr>
+<tr><td class="merged-cell">Z</td><td>0x1001</td></tr>
+<tr><td class="merged-cell">1</td><td>0x1003</td></tr>
+<tr><td class="merged-cell">2</td><td>0x1007</td></tr>
+<tr><td class="merged-cell">Y</td><td>0x100F</td></tr>
+<tr><td class="merged-cell">4</td></tr>
+<tr><td class="merged-cell">5</td><td>0x101F</td></tr>
+<tr><td class="merged-cell">6</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 3
+        </caption>
+<tr><th>ES0182 - Rev 18 - February 2025 www.st.com</th></tr>
+<tr><td>For further information, contact your local STMicroelectronics sales office.</td></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 2</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      4497 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+1 Summary of device errata
+The following table gives a quick reference to the STM32F405/407xx and STM32F415/417xx device limitations
+and their status:
+A = limitation present, workaround available
+N = limitation present, no workaround available
+P = limitation present, partial workaround available
+“-” = limitation absent
+Applicability of a workaround may depend on specific conditions of target application. Adoption of a workaround
+may cause restrictions to target application. Workaround for a limitation is deemed partial if it only red</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th></tr>
+<tr><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>Core</td><td>2.1.1</td><td>Interrupted loads to SP can cause erroneous</td></tr>
+<tr><td>behavior</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.1.2</td><td>VDIV or VSQRT instructions might not</td></tr>
+<tr><td>complete correctly when very short ISRs are</td></tr>
+<tr><td>used</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.1.3</td><td>Store immediate overlapping exception return</td></tr>
+<tr><td>operation might vector to incorrect interrupt</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>System</td><td>2.2.1</td><td>ART Accelerator prefetch queue instruction is</td></tr>
+<tr><td>not supported</td><td class="merged-cell">N</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td></tr>
+<tr><td>2.2.2</td><td>MCU device ID is incorrect</td><td class="merged-cell">A</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td><td class="merged-cell">-</td></tr>
+<tr><td>2.2.3</td><td>Debugging Stop mode and SysTick timer</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.4</td><td>Debugging Stop mode with WFE entry</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.5</td><td>Debugging Sleep/Stop mode with WFE/WFI</td></tr>
+<tr><td>entry</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.6</td><td>Wake-up sequence from Standby mode when</td></tr>
+<tr><td>using more than one wake-up source</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.7</td><td>Full JTAG configuration without NJTRST pin</td></tr>
+<tr><td>cannot be used</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.8</td><td>PDR_ON pin not available on LQFP100</td></tr>
+<tr><td>package except for revision A devices</td><td class="merged-cell">-</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.2.9</td><td>Incorrect BOR option byte when consecutively</td></tr>
+<tr><td>programming BOR option byte</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.10</td><td>Configuration of PH10 and PI10 as external</td></tr>
+<tr><td>interrupts is erroneous</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.2.11</td><td>Slowing down APB clock during a DMA</td></tr>
+<tr><td>transfer</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.12</td><td>MPU attribute to RTC and IWDG registers</td></tr>
+<tr><td>incorrectly managed</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.13</td><td>Delay after an RCC peripheral clock enabling</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.14</td><td>Battery charge monitoring lower than 2.4 V</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td></tr>
+<tr><td>2.2.15</td><td>Internal noise impacting the ADC accuracy</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.16</td><td>RDP level 2 and sector write protection</td></tr>
+<tr><td>configuration</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 2/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 3</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      5032 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+Possible delay in backup domain protection
+2.2.17 disabling/enabling after programming the DBP A A A A A A A A
+bit
+2.2.18 PC13 signal transitions disturb LSE N N N N N N N N
+System In some specific cases, DMA2 data corruption
+2.2.19 occurs when managing AHB and APB2 A A A A A A A A
+peripherals in a concurrent way
+Corrupted content of the backup domain due
+2.2.20 to a missed power-on reset after this domain A A A A A A A A
+supply voltage drop
+Du</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th></tr>
+<tr><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>System</td><td>2.2.17</td><td>Possible delay in backup domain protection</td></tr>
+<tr><td>disabling/enabling after programming the DBP</td></tr>
+<tr><td>bit</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.18</td><td>PC13 signal transitions disturb LSE</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.2.19</td><td>In some specific cases, DMA2 data corruption</td></tr>
+<tr><td>occurs when managing AHB and APB2</td></tr>
+<tr><td>peripherals in a concurrent way</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.2.20</td><td>Corrupted content of the backup domain due</td></tr>
+<tr><td>to a missed power-on reset after this domain</td></tr>
+<tr><td>supply voltage drop</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>FSMC</td><td>2.3.1</td><td>Dummy read cycles inserted when reading</td></tr>
+<tr><td>synchronous memories</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.3.2</td><td>FSMC synchronous mode and NWAIT signal</td></tr>
+<tr><td>disabled</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.3.3</td><td>FSMC NOR/PSRAM controller: asynchronous</td></tr>
+<tr><td>read access on bank 2 to 4 returns wrong data</td></tr>
+<tr><td>when bank 1 is in synchronous mode</td></tr>
+<tr><td>(BURSTEN bit is set)</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>SDIO</td><td>2.4.1</td><td>Wrong data written during SDIO hardware flow</td></tr>
+<tr><td>control</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.4.2</td><td>Wrong CCRCFAIL status after a response</td></tr>
+<tr><td>without CRC is received</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.4.3</td><td>SDIO clock divider Bypass mode may not</td></tr>
+<tr><td>work properly</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.4.4</td><td>Data corruption in SDIO clock dephasing</td></tr>
+<tr><td>(NEGEDGE) mode</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.4.5</td><td>CE-ATA multiple write command and card</td></tr>
+<tr><td>busy signal management</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.4.6</td><td>No underrun detection with wrong data</td></tr>
+<tr><td>transmission</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>ADC</td><td>2.5.1</td><td>ADC sequencer modification during</td></tr>
+<tr><td>conversion</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>DAC</td><td>2.6.1</td><td>DMA request not automatically cleared by</td></tr>
+<tr><td>clearing DMAEN</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.6.2</td><td>DMA underrun flag not set when an internal</td></tr>
+<tr><td>trigger is detected on the clock cycle of the</td></tr>
+<tr><td>DMA request acknowledge</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>TIM</td><td>2.7.1</td><td>PWM re-enabled in automatic output enable</td></tr>
+<tr><td>mode despite of system break</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td></tr>
+<tr><td>2.7.3</td><td>Consecutive compare event missed in specific</td></tr>
+<tr><td>conditions</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.7.4</td><td>Output compare clear not working with</td></tr>
+<tr><td>external counter reset</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td></tr>
+<tr><td>IWDG</td><td>2.8.1</td><td>RVU flag not reset in Stop</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.8.2</td><td>PVU flag not reset in Stop</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.8.3</td><td>RVU flag not cleared at low APB clock</td></tr>
+<tr><td>frequency</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.8.4</td><td>PVU flag not cleared at low APB clock</td></tr>
+<tr><td>frequency</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>RTC</td><td>2.9.1</td><td>Spurious tamper detection when disabling the</td></tr>
+<tr><td>tamper channel</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 3/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 4</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      5366 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+2.9.2 RTC calendar registers are not locked properly A A A A A A A A
+RTC interrupt can be masked by another RTC
+2.9.3 A A A A A A A A
+interrupt
+Calendar initialization may fail in case of
+2.9.4 A A A A A A A A
+consecutive INIT mode entry
+RTC
+Alarm flag may be repeatedly set when the
+2.9.5 N N N N N N N N
+core is stopped in debug
+Detection of a tamper event occurring before
+2.9.6 enabling the tamper detection is not supported A A A A A A A A
+in </div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th></tr>
+<tr><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>RTC</td><td>2.9.2</td><td>RTC calendar registers are not locked properly</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.9.3</td><td>RTC interrupt can be masked by another RTC</td></tr>
+<tr><td>interrupt</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.9.4</td><td>Calendar initialization may fail in case of</td></tr>
+<tr><td>consecutive INIT mode entry</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.9.5</td><td>Alarm flag may be repeatedly set when the</td></tr>
+<tr><td>core is stopped in debug</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.9.6</td><td>Detection of a tamper event occurring before</td></tr>
+<tr><td>enabling the tamper detection is not supported</td></tr>
+<tr><td>in edge detection mode</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>I2C</td><td>2.10.1</td><td>Spurious bus error detection in controller</td></tr>
+<tr><td>mode</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.10.2</td><td>SMBus standard not fully supported</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.10.3</td><td>Start cannot be generated after a misplaced</td></tr>
+<tr><td>Stop</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.10.4</td><td>Mismatch on the “Setup time for a repeated</td></tr>
+<tr><td>Start condition” timing parameter</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.10.5</td><td>Data valid time (tVD;DAT) violated without the</td></tr>
+<tr><td>OVR flag being set</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.10.6</td><td>Both SDA and SCL maximum rise times (tr)</td></tr>
+<tr><td>violated when the VDD_I2C bus voltage is</td></tr>
+<tr><td>higher than ((VDD + 0.3) / 0.7) V</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>USART</td><td>2.11.1</td><td>Idle frame is not detected if the receiver clock</td></tr>
+<tr><td>speed is deviated</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.11.2</td><td>In full-duplex mode, the Parity Error (PE) flag</td></tr>
+<tr><td>can be cleared by writing to the data register</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.11.3</td><td>Parity Error (PE) flag is not set when receiving</td></tr>
+<tr><td>in Mute mode using address mark detection</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.11.4</td><td>Break frame is transmitted regardless of CTS</td></tr>
+<tr><td>input line status</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.11.5</td><td>RTS signal abnormally driven low after a</td></tr>
+<tr><td>protocol violation</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.11.6</td><td>Start bit detected too soon when sampling for</td></tr>
+<tr><td>NACK signal from the smartcard</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.11.7</td><td>Break request can prevent the transmission</td></tr>
+<tr><td>complete flag (TC) from being set</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.11.8</td><td>Guard time not respected when data are sent</td></tr>
+<tr><td>on TXE events</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.11.9</td><td>RTS is active while RE or UE = 0</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>SPI/I2S</td><td>2.12.1</td><td>BSY bit may stay high when SPI is disabled</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.12.2</td><td>Anticipated communication upon SPI transit</td></tr>
+<tr><td>from slave receiver to master</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.12.3</td><td>Wrong CRC calculation when the polynomial</td></tr>
+<tr><td>is even</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.12.4</td><td>Corrupted last bit of data and/or CRC received</td></tr>
+<tr><td>in Master mode with delayed SCK feedback</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.12.5</td><td>BSY flag may stay high at the end of a data</td></tr>
+<tr><td>transfer in Slave mode</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 4/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 5</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      5490 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+In I2S Slave mode, the WS level must be set
+2.12.6 A A A A A A A A
+by the external master when enabling the I2S
+SPI/I2S
+I2S2 in full-duplex mode may not work
+2.12.7 properly when SCK and WS signals are A A A A A A A A
+mapped on PI1 and PI0, respectively
+bxCAN time-triggered communication mode
+bxCAN 2.13.1 N N N N N N N N
+not supported
+Transmit data FIFO is corrupted when a write
+2.14.1 sequence to the FIFO is interrupted with A A A A A A A A
+ac</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th></tr>
+<tr><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>SPI/I2S</td><td>2.12.6</td><td>In I2S Slave mode, the WS level must be set</td></tr>
+<tr><td>by the external master when enabling the I2S</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.12.7</td><td>I2S2 in full-duplex mode may not work</td></tr>
+<tr><td>properly when SCK and WS signals are</td></tr>
+<tr><td>mapped on PI1 and PI0, respectively</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>bxCAN</td><td>2.13.1</td><td>bxCAN time-triggered communication mode</td></tr>
+<tr><td>not supported</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>OTG_FS</td><td>2.14.1</td><td>Transmit data FIFO is corrupted when a write</td></tr>
+<tr><td>sequence to the FIFO is interrupted with</td></tr>
+<tr><td>accesses to certain OTG_FS registers</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.14.2</td><td>Host packet transmission may hang when</td></tr>
+<tr><td>connecting through a hub to a low-speed</td></tr>
+<tr><td>device</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.14.3</td><td>Data in RxFIFO is overwritten when all</td></tr>
+<tr><td>channels are disabled simultaneously</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.14.4</td><td>OTG host blocks the receive channel when</td></tr>
+<tr><td>receiving IN packets and no TxFIFO is</td></tr>
+<tr><td>configured</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.14.5</td><td>Host channel-halted interrupt not generated</td></tr>
+<tr><td>when the channel is disabled</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.14.6</td><td>Wrong software-read OTG_FS_DCFG register</td></tr>
+<tr><td>values</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>OTG_HS</td><td>2.15.1</td><td>Transmit data FIFO is corrupted when a write</td></tr>
+<tr><td>sequence to the FIFO is interrupted with</td></tr>
+<tr><td>accesses to certain OTG_HS registers</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.15.2</td><td>Host packet transmission may hang when</td></tr>
+<tr><td>connecting the full speed interface through a</td></tr>
+<tr><td>hub to a low-speed device</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>ETH</td><td>2.16.1</td><td>Incorrect L3 checksum is inserted in</td></tr>
+<tr><td>transmitted IPv6 packets without TCP, UDP or</td></tr>
+<tr><td>ICMP payloads</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.16.2</td><td>The Ethernet MAC processes invalid</td></tr>
+<tr><td>extension headers in the received IPv6 frames</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td><td class="merged-cell">N</td></tr>
+<tr><td>2.16.3</td><td>MAC stuck in the idle state on receiving the</td></tr>
+<tr><td>TxFIFO flush command exactly one clock</td></tr>
+<tr><td>cycle after a transmission completes</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td></tr>
+<tr><td>2.16.4</td><td>Transmit frame data corruption</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.16.5</td><td>Incorrect status and corrupted frames when</td></tr>
+<tr><td>RxFIFO overflow occurs on the penultimate</td></tr>
+<tr><td>word of Rx frames</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.16.6</td><td>Successive write operations to the same</td></tr>
+<tr><td>register might not be fully taken into account</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.16.7</td><td>Incorrect remote wakeup on global unicast</td></tr>
+<tr><td>packet</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td></tr>
+<tr><td>2.16.8</td><td>Overflow status bits of missed frame and</td></tr>
+<tr><td>buffer overflow counters are cleared without a</td></tr>
+<tr><td>read operation</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.16.9</td><td>MAC may provide incorrect Rx status for the</td></tr>
+<tr><td>MAC control frames when receive checksum</td></tr>
+<tr><td>offload is enabled</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+<tr><td>2.16.10</td><td>MAC may provide an inaccurate Rx status</td></tr>
+<tr><td>when receive checksum offload is enabled in</td></tr>
+<tr><td>cut-through mode</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td><td class="merged-cell">P</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 5/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 6</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      837 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+ETH 2.16.11 MAC may not drop received giant error frames A A A A A A A A
+The following table gives a quick reference to the documentation errata.
+Table 4. Summary of device documentation errata
+Function Section Documentation erratum
+TIM 2.7.2 TRGO and TRGO2 trigger output failure
+ES0182 - Rev 18 page 6/46
+
+
+
+
+
+</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (3 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th></tr>
+<tr><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>ETH</td><td>2.16.11</td><td>MAC may not drop received giant error frames</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td><td class="merged-cell">A</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>Function</th><th>Section</th><th>Documentation erratum</th></tr>
+<tr><td>TIM</td><td>2.7.2</td><td>TRGO and TRGO2 trigger output failure</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 3
+        </caption>
+<tr><th>ES0182 - Rev 18 page 6/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 7</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2978 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2 Description of device errata
+The following sections describe the errata of the applicable devices with Arm® core and provide workarounds if
+available. They are grouped by device functions.
+Note: Arm is a registered trademark of Arm Limited (or its subsidiaries) in the US and/or elsewhere.
+2.1 Core
+Reference manual and errata notice for the Arm® Cortex®-M4F core revision r0p1 is available from http://
+infocenter.arm.com. Only applicable information from the Arm errata notice is replicated in this document.
+2.1.1 Interrupted load</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 7/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 8</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      3440 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+The failure occurs when the following condition is met:
+1. The floating point unit is enabled
+2. Lazy context saving is not disabled
+3. A VDIV or VSQRT is executed
+4. The destination register for the VDIV or VSQRT is one of s0 - s15
+5. An interrupt occurs and is taken
+6. The interrupt service routine being executed does not contain a floating point instruction
+7. Within 14 cycles after the VDIV or VSQRT is executed, an interrupt return is executed
+A minimum of 12 of these 14 cycles are utilized for the context state stacking, whi</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 8/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 9</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2106 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Example:
+The processor should execute interrupt handler C, and on completion of handler C should execute the handler for
+B. If the conditions above are met, then this erratum results in the processor erroneously clearing the pending
+state of interrupt C, and then executing the handler for B twice. The first time the handler for B is executed it will
+be at interrupt C's priority level. If interrupt C is pended by a level-based interrupt which is cleared by C's handler
+then interrupt C will be pended again once the handler for B ha</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 9/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 10</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      1964 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+• Revision A:
+To differentiate the STM32F4xxx from the STM32F2xxx series, read the MCU device ID and the core
+device:
+– For STM32F2xxx
+◦ MCU device ID = STM32F2xxx device ID
+◦ Core device = Cortex®-M3
+– For STM32F4xxx
+◦ MCU device ID = STM32F4xxx device ID
+◦ Core device = Cortex®-M4
+• Other revisions: fixed.
+2.2.3 Debugging Stop mode and SysTick timer
+Description
+If the SysTick timer interrupt is enabled during the Stop mode debug (DBG_STOP bit set in the DBGMCU_CR
+register), it wakes up the system from Stop mode.
+Work</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 10/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 11</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2481 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+Apply one of the following measures:
+• Add three NOPs after WFI/WFE instruction.
+• Keep one AHB master active during Sleep (example keep DMA1 or DMA2 RCC clock enable bit set).
+• Execute WFI/WFE instruction from routines inside the SRAM.
+2.2.6 Wake-up sequence from Standby mode when using more than one wake-up source
+Description
+The various wake-up sources are logically OR-ed in front of the rising-edge detector that generates the wake-up
+flag (WUF). The WUF needs to be cleared before Standby mode entry, otherwise the </div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 11/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 12</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2476 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.2.9 Incorrect BOR option byte when consecutively programming BOR option byte
+Description
+When the AHB prescaler is greater than 2, and consecutive BOR option byte program operations are performed
+without resetting the device, then an incorrect value may be programmed in the BOR option byte.
+Workaround
+To program consecutive BOR option byte values, either configure the AHB prescaler to 1 or 2, or perform a
+system reset between each BOR option byte program operation.
+2.2.10 Configuration of PH10 and PI10 as external interrupts is</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 12/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 13</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2688 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+This delay depends on the peripheral mapping:
+• If the peripheral is mapped on the AHB: the delay may be equal to two AHB cycles.
+• If the peripheral is mapped on the APB: the delay may be equal to 1 + (AHB/APB prescaler) cycles.
+Workaround
+Apply one of the following measures:
+• Use the DSB instruction to stall the Arm® Cortex®-M4 CPU pipeline until the instruction has completed.
+• Insert “n” NOPs between the RCC enable bit write and the peripheral register writes (n = 2 for AHB
+peripherals, n = 1 + AHB/APB prescaler for APB peri</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 13/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 14</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2852 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+Apply one of the following measures:
+• Insert a dummy read operation to the PWR_CR register just after programming the DBP bit.
+• Wait for the end of the operation (reset through the BDRST bit or write to the backup domain) via a polling
+loop on targeted registers.
+2.2.18 PC13 signal transitions disturb LSE
+Description
+PC13 toggling in input or output (for example when used for RTC_AF1) may cause an incorrect LSE crystal
+oscillator clock frequency.
+Note: The external clock input (LSE bypass) is not impacted by this lim</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 14/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 15</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2443 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+Apply one of the following measures:
+• In the application, let the V and V supply voltages fall to a level below 100 mV for more than 200 ms
+DD BAT
+before a new power‑on.
+• If the above workaround cannot be applied, and the boot follows a power‑on reset, erase the backup
+domain by software.
+2.3 FSMC
+2.3.1 Dummy read cycles inserted when reading synchronous memories
+Description
+When performing a burst read access from a synchronous memory, two dummy read accesses are performed at
+the end of the burst cycle whatever the </div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 15/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 16</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2565 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+None.
+Note: Do not use the hardware flow control. Overrun errors (Rx mode) and FIFO underrun (Tx mode) must be
+managed by the application software.
+2.4.2 Wrong CCRCFAIL status after a response without CRC is received
+Description
+The CRC is calculated even if the response to a command does not contain any CRC field. As a consequence,
+after the SDIO command IO_SEND_OP_COND (CMD5) is sent, the CCRCFAIL bit of the SDIO_STA register is
+set.
+Workaround
+The CCRCFAIL bit in the SDIO_STA register must be ignored by the software</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 16/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 17</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2279 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.4.6 No underrun detection with wrong data transmission
+Description
+In case there is an ongoing data transfer from the SDIO host to the SD card and the hardware flow control is
+disabled (bit 14 of the SDIO_CLKCR is not set), if an underrun condition occurs, the controller may transmit a
+corrupted data block (with a wrong data word) without detecting the underrun condition when the clock
+frequencies have the following relationship:
+W3o×rkpaerroioudndPCLK2 +3×period SDIOCLK ≥ 32/ BusWidth ×period SDIO_CK
+Avoid the above-mentioned </div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 17/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 18</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2947 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.6.2 DMA underrun flag not set when an internal trigger is detected on the clock cycle of the DMA
+request acknowledge
+Description
+When the DAC channel operates in DMA mode (DMAEN of DAC_CR register set), the DMA channel underrun
+flag (DMAUDR of DAC_SR register) fails to rise upon an internal trigger detection if that detection occurs during
+the same clock cycle as a DMA request acknowledge. As a result, the user application is not informed that an
+underrun error occurred.
+This issue occurs when software and hardware triggers are</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 18/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 19</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2556 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.7.3 Consecutive compare event missed in specific conditions
+Description
+Every match of the counter (CNT) value with the compare register (CCR) value is expected to trigger a compare
+event. However, if such matches occur in two consecutive counter clock cycles (as consequence of the CCR
+value change between the two cycles), the second compare event is missed for the following CCR value
+changes:
+• in edge-aligned mode, from ARR to 0:
+– first compare event: CNT = CCR = ARR
+– second (missed) compare event: CNT = CCR = 0
+• in center</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 19/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 20</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2347 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.8 IWDG
+2.8.1 RVU flag not reset in Stop
+Description
+Successful write to the IWDG_RLR register raises the RVU flag and prevents further write accesses to the
+register until the RVU flag is automatically cleared by hardware. However, if the device enters Stop mode while
+the RVU flag is set, the hardware never clears that flag, and writing to the IWDG_RLR register is no longer
+possible.
+Workaround
+Ensure that the RVU flag is cleared before entering Stop mode.
+2.8.2 PVU flag not reset in Stop
+Description
+Successful write to the IWD</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 20/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 21</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2170 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+None.
+2.9.2 RTC calendar registers are not locked properly
+Description
+When reading the calendar registers with BYPSHAD = 0, the RTC_TR and RTC_DR registers may not be locked
+after reading the RTC_SSR register. This happens if the read operation is initiated one APB clock period before
+the shadow registers are updated. This can result in a non-consistency of the three registers. Similarly, the
+RTC_DR register can be updated after reading the RTC_TR register instead of being locked.
+Workaround
+Apply one of the following</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 21/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 22</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2319 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">Figure 1. Masked RTC interrupt
+1V77474TD
+STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Failure window:
+Alarm A Flag is being set after the software checks
+its value
+Alarm A Flag does not raise EXTI flag because this
+one is not yet hardware cleared.
+Alarm B Flag
+Alarm A Flag
+EXTI Flag
+Alarm A is never processed
+If (ALRBF) because no interrupt is generated
+CLEAR_ If {
+ISR execution ALARM_ (ALRA CLEAR_FLAG(ALRBF); through EXTI
+EXTI(); F) PROCESS_AlarmBEvent();
+}
+Workaround
+In the interrupt service routine, apply three consecutive event flag ckecks - source one, source two, and </div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>CLEAR_</th></tr>
+<tr><td>ALARM_</td></tr>
+<tr><td>EXTI();</td><td class="merged-cell">If</td></tr>
+<tr><td>(ALRA</td></tr>
+<tr><td class="merged-cell">F)</td><td>If (ALRBF)</td></tr>
+<tr><td class="merged-cell">{</td></tr>
+<tr><td>CLEAR_FLAG(ALRBF);</td></tr>
+<tr><td>PROCESS_AlarmBEvent();</td></tr>
+<tr><td class="merged-cell">}</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 22/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 23</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2639 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Note: It is recommended to write all registers in a single initialization session to avoid accumulating synchronization
+delays.
+2.9.5 Alarm flag may be repeatedly set when the core is stopped in debug
+Description
+When the core is stopped in debug mode, the clock is supplied to subsecond RTC alarm downcounter even when
+the device is configured to stop the RTC in debug.
+As a consequence, when the subsecond counter is used for alarm condition (the MASKSS[3:0] bitfield of the
+RTC_ALRMASSR and/or RTC_ALRMBSSR register set to a non-zer</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 23/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 24</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2609 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+A higher-level mechanism must be used to verify that a write operation is being performed correctly at the target
+device, such as:
+• the SMBAL pin if it is supported by the host
+• the alert response address (ARA) protocol
+• the host-notify protocol
+2.10.3 Start cannot be generated after a misplaced Stop
+Description
+If a controller generates a misplaced Stop on the bus (bus error) while the microcontroller I2C peripheral attempts
+to switch to Controller mode by setting the START bit, the Start condition is not properly </div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 24/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 25</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2789 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+If the controller device allows it, use the clock stretching mechanism by clearing the bit NOSTRETCH of the
+I2C_CR1 register.
+If the controller device does not allow it, ensure that the software is fast enough when polling the TXE or ADDR
+flag to immediately write to the DR data register. For instance, use an interrupt on the TXE or ADDR flag and
+boost its priority to the higher level.
+2.10.6 Both SDA and SCL maximum rise times (t ) violated when the VDD_I2C bus voltage is higher
+r
+than ((V + 0.3) / 0.7) V
+DD
+Descripti</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 25/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 26</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2588 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+None.
+2.11.4 Break frame is transmitted regardless of CTS input line status
+Description
+When the CTS hardware flow control is enabled (CTSE = 1) and the send break bit (SBK) is set, the transmitter
+sends a break frame at the end of the current transmission regardless of CTS input line status. Consequently, if
+an external receiver device is not ready to accept a frame, the transmitted break frame is lost.
+Workaround
+None.
+2.11.5 RTS signal abnormally driven low after a protocol violation
+Description
+When RTS hardware fl</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 26/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 27</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2184 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.11.7 Break request can prevent the transmission complete flag (TC) from being set
+Description
+After the end of transmission of a data (D1), the transmission complete (TC) flag is not set if the following
+conditions are met:
+• CTS hardware flow control is enabled,
+• D1 is being transmitted,
+• a break transfer is requested before the end of D1 transfer,
+• CTS is de-asserted before the end of D1 data transfer.
+Workaround
+If the application needs to detect the end of a data transfer, check that the TC flag is set, and issue a break</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 27/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 28</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      3011 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.12.2 Anticipated communication upon SPI transit from slave receiver to master
+Description
+Regardless of the master mode configured, the communication clock starts upon setting the MSTR bit even
+though the SPI is disabled, if transiting from receive‑only (RXONLY = 1) or half‑duplex receive (BIDIMODE = 1
+and BIDIOE = 0) slave mode to master mode.
+Workaround
+Apply one of the following measures:
+• Before transiting to master mode, hardware‑reset the SPI via the reset controller.
+• Set the MSTR and SPE bits of the SPI configuration </div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>OSPEEDR [1:0] for SCK pin</th><th>Max. APB frequency for SPI mode</th></tr>
+<tr><td>(MHz)</td><td>Max. APB frequency for I2S mode</td></tr>
+<tr><td>(MHz)</td></tr>
+<tr><td>11 (very high), 10 (high)</td><td class="merged-cell">84</td><td class="merged-cell">42</td></tr>
+<tr><td>01 (medium)</td><td class="merged-cell">75</td><td class="merged-cell">35</td></tr>
+<tr><td>00 (low)</td><td class="merged-cell">25</td><td class="merged-cell">16</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 28/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 29</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      3731 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.12.5 BSY flag may stay high at the end of a data transfer in Slave mode
+Description
+The BSY flag may sporadically remain high at the end of a data transfer in Slave mode. The issue appears when
+an accidental synchronization happens between the internal CPU clock and the external SCK clock provided by
+the master.
+This is related to the end of data transfer detection while the SPI is enabled in Slave mode.
+As a consequence, the end of the data transaction may be not recognized when the software needs to monitor it
+(for example at</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 29/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 30</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2067 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+Use other mapped pins for SCK and WS signals:
+• I2S2 CK signal: PB10 or PB13 pin.
+• I2S2 WS signal: PB12 or PB9 pin.
+2.13 bxCAN
+2.13.1 bxCAN time-triggered communication mode not supported
+Description
+The time-triggered communication mode described in the reference manual is not supported. As a result,
+timestamp values are not available. The TTCM bit of the CAN_MCR register must be kept cleared (time-triggered
+communication mode disabled).
+Workaround
+None.
+2.14 OTG_FS
+2.14.1 Transmit data FIFO is corrupted when a write</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 30/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 31</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2585 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+Use one of the following measures:
+• Configure the RxFIFO to host a minimum of 2 × MPSIZ + 2 × data status entries.
+• Check the RXFLVL bit (RxFIFO nonempty) of the OTG_FS_GINTSTS register before disabling each IN
+channel. If this bit is cleared, then disable an IN channel at a time. Each time the application disables an IN
+channel, it first has to check that the RXFLVL bit = 0 condition is true.
+2.14.4 OTG host blocks the receive channel when receiving IN packets and no TxFIFO is configured
+Description
+When receiving d</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 31/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 32</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2834 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Workaround
+Ensure that the transmit FIFO write sequence is not interrupted with accesses to the OTG_HS registers. Note that
+enabling DMA mode guarantees this.
+2.15.2 Host packet transmission may hang when connecting the full speed interface through a hub to
+a low-speed device
+Description
+When the USB on-the-go high-speed peripheral is used with the full speed interface (DM and DP pins, N.B. not
+available on all devices), and connects to a low-speed device via a hub, the transmitter internal state machine
+may hang. This leads, aft</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 32/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 33</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      3126 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.16.3 MAC stuck in the idle state on receiving the TxFIFO flush command exactly one clock cycle
+after a transmission completes
+Description
+When the software issues a TxFIFO flush command, the transfer of frame data stops, even in the middle of a
+frame transfer. The TxFIFO read controller goes into the Idle state by clearing the TFRS [1:0] bit field of the
+ETH_MACDBGR register. It then resumes its normal operation.
+However, if the TxFIFO read controller receives the TxFIFO flush command exactly one clock cycle after receiving
+the</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 33/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 34</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      1663 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.16.6 Successive write operations to the same register might not be fully taken into account
+Description
+A write to a register might not be fully taken into account if a previous write to the same register is performed
+within a time period of four TX_CLK/RX_CLK clock cycles. When this error occurs, reading the register returns
+the most recently written value, but the Ethernet MAC continues to operate as if the latest write operation never
+occurred.
+Refer to the following table for the registers and bits impacted by this limitati</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Register name</th><th>Bit number</th><th>Bit name</th></tr>
+<tr><td>DMA registers</td></tr>
+<tr><td>ETH_DMABMR</td><td class="merged-cell">7</td><td>EDFE</td></tr>
+<tr><td>ETH_DMAOMR</td><td class="merged-cell">26</td><td>DTCEFD</td></tr>
+<tr><td class="merged-cell">25</td><td>RSF</td></tr>
+<tr><td class="merged-cell">20</td><td>FTF</td></tr>
+<tr><td class="merged-cell">7</td><td>FEF</td></tr>
+<tr><td class="merged-cell">6</td><td>FUGF</td></tr>
+<tr><td>4:3</td><td>RTC</td></tr>
+<tr><td>GMAC registers</td></tr>
+<tr><td>ETH_MACCR</td><td class="merged-cell">25</td><td>CSTF</td></tr>
+<tr><td class="merged-cell">23</td><td class="merged-cell">WD</td></tr>
+<tr><td class="merged-cell">22</td><td class="merged-cell">JD</td></tr>
+<tr><td>19:17</td><td>IFG</td></tr>
+<tr><td class="merged-cell">16</td><td>CSD</td></tr>
+<tr><td class="merged-cell">14</td><td>FES</td></tr>
+<tr><td class="merged-cell">13</td><td>ROD</td></tr>
+<tr><td class="merged-cell">12</td><td class="merged-cell">LM</td></tr>
+<tr><td class="merged-cell">11</td><td class="merged-cell">DM</td></tr>
+<tr><td class="merged-cell">10</td><td>IPCO</td></tr>
+<tr><td class="merged-cell">9</td><td class="merged-cell">RD</td></tr>
+<tr><td class="merged-cell">7</td><td>APCS</td></tr>
+<tr><td>6:5</td><td class="merged-cell">BL</td></tr>
+<tr><td class="merged-cell">4</td><td class="merged-cell">DC</td></tr>
+<tr><td class="merged-cell">3</td><td class="merged-cell">TE</td></tr>
+<tr><td class="merged-cell">2</td><td class="merged-cell">RE</td></tr>
+<tr><td>ETH_MACFFR MAC</td><td class="merged-cell">-</td><td>frame filter register</td></tr>
+<tr><td>ETH_MACHTHR</td><td>31:0</td><td>Hash Table High Register</td></tr>
+<tr><td>ETH_MACHTLR</td><td>31:0</td><td>Hash Table Low Register</td></tr>
+<tr><td>ETH_MACFCR</td><td>31:16</td><td class="merged-cell">PT</td></tr>
+<tr><td class="merged-cell">7</td><td>ZQPD</td></tr>
+<tr><td>5:4</td><td>PLT</td></tr>
+<tr><td class="merged-cell">3</td><td>UPFD</td></tr>
+<tr><td class="merged-cell">2</td><td>RFCE</td></tr>
+<tr><td class="merged-cell">1</td><td>TFCE</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 34/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 35</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2026 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Register name Bit number Bit name
+ETH_MACFCR 0 FCB/BPA
+16 VLANTC
+ETH_MACVLANTR
+15:0 VLANTI
+ETH_MACRWUFFR - all remote wakeup registers
+31 WFFRPR
+9 GU
+ETH_MACPMTCSR 2 WFE
+1 MPE
+0 PD
+ETH_MACA0HR - MAC address 0 high register
+ETH_MACA0LR - MAC address 0 low register
+ETH_MACA1HR - MAC address 1 high register
+ETH_MACA1LR - MAC address 1 low register
+ETH_MACA2HR - MAC address 2 high register
+ETH_MACA2LR - MAC address 2 low register
+ETH_MACA3HR - MAC address 3 high register
+ETH_MACA3LR - MAC address 3 low register
+IEEE 1588 time stamp r</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Register name</th><th>Bit number</th><th>Bit name</th></tr>
+<tr><td>ETH_MACFCR</td><td class="merged-cell">0</td><td>FCB/BPA</td></tr>
+<tr><td>ETH_MACVLANTR</td><td class="merged-cell">16</td><td>VLANTC</td></tr>
+<tr><td>15:0</td><td>VLANTI</td></tr>
+<tr><td>ETH_MACRWUFFR</td><td class="merged-cell">-</td><td>all remote wakeup registers</td></tr>
+<tr><td>ETH_MACPMTCSR</td><td class="merged-cell">31</td><td>WFFRPR</td></tr>
+<tr><td class="merged-cell">9</td><td class="merged-cell">GU</td></tr>
+<tr><td class="merged-cell">2</td><td>WFE</td></tr>
+<tr><td class="merged-cell">1</td><td>MPE</td></tr>
+<tr><td class="merged-cell">0</td><td class="merged-cell">PD</td></tr>
+<tr><td>ETH_MACA0HR</td><td class="merged-cell">-</td><td>MAC address 0 high register</td></tr>
+<tr><td>ETH_MACA0LR</td><td class="merged-cell">-</td><td>MAC address 0 low register</td></tr>
+<tr><td>ETH_MACA1HR</td><td class="merged-cell">-</td><td>MAC address 1 high register</td></tr>
+<tr><td>ETH_MACA1LR</td><td class="merged-cell">-</td><td>MAC address 1 low register</td></tr>
+<tr><td>ETH_MACA2HR</td><td class="merged-cell">-</td><td>MAC address 2 high register</td></tr>
+<tr><td>ETH_MACA2LR</td><td class="merged-cell">-</td><td>MAC address 2 low register</td></tr>
+<tr><td>ETH_MACA3HR</td><td class="merged-cell">-</td><td>MAC address 3 high register</td></tr>
+<tr><td>ETH_MACA3LR</td><td class="merged-cell">-</td><td>MAC address 3 low register</td></tr>
+<tr><td>IEEE 1588 time stamp registers</td></tr>
+<tr><td>ETH_PTPTSCR</td><td class="merged-cell">18</td><td>TSPFFMAE</td></tr>
+<tr><td>17:16</td><td>TSCNT</td></tr>
+<tr><td class="merged-cell">15</td><td>TSSMRME</td></tr>
+<tr><td class="merged-cell">14</td><td>TSSEME</td></tr>
+<tr><td class="merged-cell">13</td><td>TSSIPV4FE</td></tr>
+<tr><td class="merged-cell">12</td><td>TSSIPV6FE</td></tr>
+<tr><td class="merged-cell">11</td><td>TSSPTPOEFE</td></tr>
+<tr><td class="merged-cell">10</td><td>TSPTPPSV2E</td></tr>
+<tr><td class="merged-cell">9</td><td>TSSSR</td></tr>
+<tr><td class="merged-cell">8</td><td>TSSARFE</td></tr>
+<tr><td class="merged-cell">5</td><td>TSARU</td></tr>
+<tr><td class="merged-cell">3</td><td>TSSTU</td></tr>
+<tr><td class="merged-cell">2</td><td>TSSTI</td></tr>
+<tr><td class="merged-cell">1</td><td>TSFCU</td></tr>
+<tr><td class="merged-cell">0</td><td>TSE</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 35/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 36</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      3465 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.16.7 Incorrect remote wakeup on global unicast packet
+Description
+The PMT remote wakeup block can be enabled to generate remote wakeup interrupt on receiving a global unicast
+packet, for example a unicast destination address (DA) that perfectly matches one of the MAC address registers
+enabled for DA.
+However, the PMT remote wakeup block generates interrupts for any unicast packet that passes the DA filter (not
+necessarily for a unicast packet that passes DA perfect filter). For example, the address filter is set for inverse
+fil</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 36/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 37</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      2257 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+2.16.10 MAC may provide an inaccurate Rx status when receive checksum offload is enabled in cut-
+through mode
+Description
+The MAC can be programmed in cut-through mode by resetting the DTCEFD bit of the ETH_DMAOMR register.
+When IPv4 checksum offload function is enabled by setting the IPCO bit of ETH_MACCR register and extended
+status is not enabled, the MAC provides the bit 25 (error summary), bit 14 (descriptor error), bit 11 (overflow
+error), bit 7 (IPC checksum error), bit 6 (late collision), bit 4 (watchdog error), bit 3 (re</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 37/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 38</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      3992 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Description of device errata
+Important security notice
+The STMicroelectronics group of companies (ST) places a high value on product security, which is why the ST
+product(s) identified in this documentation may be certified by various security certification bodies and/or may
+implement our own security measures as set forth herein. However, no level of security certification and/or built-in
+security measures can guarantee that ST products are resistant to all forms of attacks. As such, it is the
+responsibility of each of ST's customers to determine if the lev</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 38/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 39</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      6243 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Revision history
+Table 6. Document revision history
+Date Version Changes
+19-Sep-2011 1 Initial release.
+Replaced STM42F4xx by STM32F4xx on cover page.
+Added silicon revision Z.
+Modified link to Arm 32-bit Cortex-M4F errata notice in Section 1: Arm® 32-bit
+Cortex®-M4 with FPU limitations.
+Updated status of ART Accelerator prefetch queue and MCU device ID
+limitations for revision Z in Table 4: Summary of silicon limitations.
+Updated Section 2.1.1: ART Accelerator prefetch queue instruction is not
+supported and Section 2.1.2: MCU device ID is incorrect to make </div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Date</th><th>Version</th><th>Changes</th></tr>
+<tr><td>19-Sep-2011</td><td class="merged-cell">1</td><td>Initial release.</td></tr>
+<tr><td>12-Dec-2011</td><td class="merged-cell">2</td><td>Replaced STM42F4xx by STM32F4xx on cover page.</td></tr>
+<tr><td>Added silicon revision Z.</td></tr>
+<tr><td>Modified link to Arm 32-bit Cortex-M4F errata notice in Section 1: Arm® 32-bit</td></tr>
+<tr><td>Cortex®-M4 with FPU limitations.</td></tr>
+<tr><td>Updated status of ART Accelerator prefetch queue and MCU device ID</td></tr>
+<tr><td>limitations for revision Z in Table 4: Summary of silicon limitations.</td></tr>
+<tr><td>Updated Section 2.1.1: ART Accelerator prefetch queue instruction is not</td></tr>
+<tr><td>supported and Section 2.1.2: MCU device ID is incorrect to make differentiate</td></tr>
+<tr><td>between revision A and revision Z devices.</td></tr>
+<tr><td>Added Section 2.1.6: Full JTAG configuration without NJTRST pin cannot be</td></tr>
+<tr><td>used, Section 2.1.7: PDR_ON pin not available on LQFP100 package for</td></tr>
+<tr><td>revision Z devices, Section 2.1.8: Incorrect BOR option byte when</td></tr>
+<tr><td>consecutively programming BOR option byte, and Section 2.1.9: Configuration</td></tr>
+<tr><td>of PH10 and PI10 as external interrupts is erroneous.</td></tr>
+<tr><td>Updated workaround for Section 2.8.5: nRTS signal abnormally riven low after</td></tr>
+<tr><td>a protocol violation.</td></tr>
+<tr><td>Added Section 2.13.2: Wrong CCRCFAIL status after a response without CRC</td></tr>
+<tr><td>is received and Section 2.3.1: RVU and PVU flags are not reset in Stop mode.</td></tr>
+<tr><td>03-Aug-2012</td><td class="merged-cell">3</td><td>Added Section : None., Section 2.1.11: Slowing down APB clock during a</td></tr>
+<tr><td>DMA transfer, Section 2.1.12: MPU attribute to RTC and IWDG registers could</td></tr>
+<tr><td>be managed incorrectly, Section 2.1.13: Delay after an RCC peripheral clock</td></tr>
+<tr><td>enabling, Section 2.1.14: Battery charge monitoring lower than 2.4 Volts and</td></tr>
+<tr><td>Appendix A: Revision code on device marking.</td></tr>
+<tr><td>Added Section 2.12.2: FSMC synchronous mode and NWAIT signal disabled.</td></tr>
+<tr><td>Added Section 2.13.3: SDIO clock divider BYPASS mode may not work</td></tr>
+<tr><td>properly, Section 2.13.4: Data corruption in SDIO clock dephasing</td></tr>
+<tr><td>(NEGEDGE) mode and Section 2.13.5: CE-ATA multiple write command and</td></tr>
+<tr><td>card busy signal management.</td></tr>
+<tr><td>Added Section 2.15: DAC peripheral limitations with Section 2.15.1: DMA</td></tr>
+<tr><td>underrun flag management and Section 2.15.2: DMA request not</td></tr>
+<tr><td>automatically cleared by DMAEN=0.</td></tr>
+<tr><td>25-Apr-2013</td><td class="merged-cell">4</td><td>Added Section 1.2: VDIV or VSQRT instructions might not complete correctly</td></tr>
+<tr><td>when very short ISRs are used.</td></tr>
+<tr><td>Removed the reference to ‘Cortex-M4F’ in the whole document.</td></tr>
+<tr><td>Updated Table 2: Device summary, Section 2.1.2: MCU device ID is incorrect.</td></tr>
+<tr><td>Added Section 2.1.5: Wakeup sequence from Standby mode when using</td></tr>
+<tr><td>more than one wakeup source.</td></tr>
+<tr><td>Updated Section 2.12.1: Dummy read cycles inserted when reading</td></tr>
+<tr><td>synchronous memories.</td></tr>
+<tr><td>Added Section 2.2: TIM limitations, Section 2.7.2: I2S2 in full-duplex mode</td></tr>
+<tr><td>may not work properly when SCK and WS signals are mapped on PI1 and PI0</td></tr>
+<tr><td>respectively, Section 2.11.5: Successive write operations to the same register</td></tr>
+<tr><td>might not be fully taken into account and Section 2.12.3: FSMC NOR Flash/</td></tr>
+<tr><td>PSRAM controller asynchronous access on bank 2 to 4 when bank 1 is in</td></tr>
+<tr><td>synchronous mode (CBURSTRW bit is set) , Section 2.13.6: No underrun</td></tr>
+<tr><td>detection with wrong data transmission and Section 2.14.1: ADC sequencer</td></tr>
+<tr><td>modification during conversion.</td></tr>
+<tr><td>Added Figure 6: WLCSP90 top package view.</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 39/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 40</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      6213 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Date Version Changes
+Added silicon revision 1.
+Added Section 2.5.5: Both SDA and SCL maximum rise time (tr) violated
+11-Oct-2013 5
+when VDD_I2C bus higher than ((VDD+0.3) / 0.7) V.
+Moved device marking to datasheets.
+Added: rev 2 and Y on Table 1: Device identification, Section 1.2: VDIV or
+VSQRT instructions might not complete correctly when very short ISRs are
+used.
+Section 2.4: RTC limitations: updated Section 2.8.6: Start bit detected too
+21-Jan-2015 6
+soon when sampling for NACK signal from the smartcard to Section 2.8.9:
+nRTS is active while RE or UE =</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Date</th><th>Version</th><th>Changes</th></tr>
+<tr><td>11-Oct-2013</td><td class="merged-cell">5</td><td>Added silicon revision 1.</td></tr>
+<tr><td>Added Section 2.5.5: Both SDA and SCL maximum rise time (tr) violated</td></tr>
+<tr><td>when VDD_I2C bus higher than ((VDD+0.3) / 0.7) V.</td></tr>
+<tr><td>Moved device marking to datasheets.</td></tr>
+<tr><td>21-Jan-2015</td><td class="merged-cell">6</td><td>Added: rev 2 and Y on Table 1: Device identification, Section 1.2: VDIV or</td></tr>
+<tr><td>VSQRT instructions might not complete correctly when very short ISRs are</td></tr>
+<tr><td>used.</td></tr>
+<tr><td>Section 2.4: RTC limitations: updated Section 2.8.6: Start bit detected too</td></tr>
+<tr><td>soon when sampling for NACK signal from the smartcard to Section 2.8.9:</td></tr>
+<tr><td>nRTS is active while RE or UE = 0</td></tr>
+<tr><td>Section 2.9: bxCAN limitations: updated Table 4: Summary of silicon</td></tr>
+<tr><td>limitations.</td></tr>
+<tr><td>14-Sep-2015</td><td class="merged-cell">7</td><td>Added:Section 2.6: SPI peripheral limitations, Section 2.6.1: Wrong CRC</td></tr>
+<tr><td>calculation when the polynomial is even, Section 2.5.6: Spurious Bus Error</td></tr>
+<tr><td>detection in Master mode. Section 2.4.7: Wrong behavior related with MCU</td></tr>
+<tr><td>Stop mode when wakeup from Stop mode by I2C peripheral is disabled.</td></tr>
+<tr><td>Section 2.6.3: BSY bit may stay high at the end of a data transfer in Slave</td></tr>
+<tr><td>mode. Section 2.6.2: Corrupted last bit of data and/or CRC, received in</td></tr>
+<tr><td>Master mode with delayed SCK feedback.</td></tr>
+<tr><td>Updated:Section 2.1.10: DMA2 data corruption when managing AHB and APB</td></tr>
+<tr><td>peripherals in a concurrent way.</td></tr>
+<tr><td>Replaced Section 2.1.5: Debugging Stop mode with WFE entry with Section</td></tr>
+<tr><td>2.1.3: Debugging Sleep/Stop mode with WFE/WFI entry.</td></tr>
+<tr><td>24-Nov-2016</td><td class="merged-cell">8</td><td>Added workaround in Section 2.1.13: Delay after an RCC peripheral clock</td></tr>
+<tr><td>enabling.</td></tr>
+<tr><td>Added Section 2.4.3: RTC calendar registers are not locked properly.</td></tr>
+<tr><td>Updated Section 2.6.2: Corrupted last bit of data and/or CRC, received in</td></tr>
+<tr><td>Master mode with delayed SCK feedback and added Section 2.5.3: Wrong</td></tr>
+<tr><td>CRC transmitted in Master mode with delayed SCK feedback. Updated</td></tr>
+<tr><td>Section 2.6.3: BSY bit may stay high at the end of a data transfer in Slave</td></tr>
+<tr><td>mode.</td></tr>
+<tr><td>Updated limitation description in Section 2.5.2: Start cannot be generated</td></tr>
+<tr><td>after a misplaced Stop.</td></tr>
+<tr><td>Added Section 2.7.3: Corrupted last bit of data and/or CRC, received in</td></tr>
+<tr><td>Master mode with delayed SCK feedback in Section 2.7: I2S peripheral</td></tr>
+<tr><td>limitations</td></tr>
+<tr><td>04-Jul-2017</td><td class="merged-cell">9</td><td>Removed Section Wrong CRC transmitted in Master mode with delayed SCK</td></tr>
+<tr><td>feedback and Section 2.4.7: Wrong behavior related with MCU Stop mode</td></tr>
+<tr><td>when wakeup from Stop mode by I2C peripheral is disabled. The I2C</td></tr>
+<tr><td>limitation does not apply to STM32F40x and STM32F41x microcontrollers.</td></tr>
+<tr><td>Updated Section 2.6.2: Corrupted last bit of data and/or CRC, received in</td></tr>
+<tr><td>Master mode with delayed SCK feedback</td></tr>
+<tr><td>24-Apr-2019</td><td class="merged-cell">10</td><td>Added revision code “4” in Table 1: Device identification.</td></tr>
+<tr><td>Updated Table 4: Summary of silicon limitations.</td></tr>
+<tr><td>Added Section 2.1.16: RDP level 2 and sector write protection configuration.</td></tr>
+<tr><td>05-Dec-2019</td><td class="merged-cell">11</td><td>Added Section 2.1.17: Possible delay in backup domain protection disabling/</td></tr>
+<tr><td>enabling after programming the DBP bit.</td></tr>
+<tr><td>08-Apr-2020</td><td class="merged-cell">12</td><td>Added revision code “4” on document cover page.</td></tr>
+<tr><td>04-Jan-2021</td><td class="merged-cell">13</td><td>Removed list of revisions from Section : Silicon identification introduction.</td></tr>
+<tr><td>Added revision 5 and 6. Added Section 2.2: TIM limitations.</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 40/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 41</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      5709 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Date Version Changes
+Core: added Store immediate overlapping exception return operation might
+vector to incorrect interrupt erratum.
+System:
+• Updated workaround of ART Accelerator prefetch queue instruction is
+not supported, MCU device ID is incorrect, Debugging Sleep/Stop
+mode with WFE/WFI entry, and Delay after an RCC peripheral clock
+enabling errata.
+• Updated Configuration of PH10 and PI10 as external interrupts is
+erroneous erratum description.
+• Updated In some specific cases, DMA2 data corruption occurs when
+managing AHB and APB2 peripherals in a con</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (2 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>Date</th><th>Version</th><th>Changes</th></tr>
+<tr><td>21-Feb-2023</td><td class="merged-cell">14</td><td>Core: added Store immediate overlapping exception return operation might</td></tr>
+<tr><td>vector to incorrect interrupt erratum.</td></tr>
+<tr><td>System:</td></tr>
+<tr><td>• Updated workaround of ART Accelerator prefetch queue instruction is</td></tr>
+<tr><td>not supported, MCU device ID is incorrect, Debugging Sleep/Stop</td></tr>
+<tr><td>mode with WFE/WFI entry, and Delay after an RCC peripheral clock</td></tr>
+<tr><td>enabling errata.</td></tr>
+<tr><td>• Updated Configuration of PH10 and PI10 as external interrupts is</td></tr>
+<tr><td>erroneous erratum description.</td></tr>
+<tr><td>• Updated In some specific cases, DMA2 data corruption occurs when</td></tr>
+<tr><td>managing AHB and APB2 peripherals in a concurrent way erratum.</td></tr>
+<tr><td>• Added PC13 signal transitions disturb LSE erratum.</td></tr>
+<tr><td>IWDG: added RVU flag not cleared at low APB clock frequency and PVU flag</td></tr>
+<tr><td>not cleared at low APB clock frequency errata.</td></tr>
+<tr><td>RTC: added RTC interrupt can be masked by another RTC interrupt, Calendar</td></tr>
+<tr><td>initialization may fail in case of consecutive INIT mode entry and Alarm flag</td></tr>
+<tr><td>may be repeatedly set when the core is stopped in debug errata.</td></tr>
+<tr><td>USART:</td></tr>
+<tr><td>• Changed nCTS and nRTS to CTS and RTS respectively.</td></tr>
+<tr><td>• Updated Break request can prevent the transmission complete flag</td></tr>
+<tr><td>(TC) from being set and Guard time not respected when data are sent</td></tr>
+<tr><td>on TXE events erratum workarounds.</td></tr>
+<tr><td>SPI/I2S: added BSY bit may stay high when SPI is disabled, and Anticipated</td></tr>
+<tr><td>communication upon SPI transit from slave receiver to master errata.</td></tr>
+<tr><td>SDIO: updated Wrong data written during SDIO hardware flow control erratum</td></tr>
+<tr><td>title.</td></tr>
+<tr><td>OTG_FS: added Transmit data FIFO is corrupted when a write sequence to</td></tr>
+<tr><td>the FIFO is interrupted with accesses to certain OTG_FS registers and Host</td></tr>
+<tr><td>packet transmission may hang when connecting through a hub to a low-speed</td></tr>
+<tr><td>device errata.</td></tr>
+<tr><td>Added OTG_HS errata.</td></tr>
+<tr><td>ETH: added Incorrect status and corrupted frames when RxFIFO overflow</td></tr>
+<tr><td>occurs on the penultimate word of Rx frames, Incorrect remote wakeup on</td></tr>
+<tr><td>global unicast packet, Overflow status bits of missed frame and buffer</td></tr>
+<tr><td>overflow counters are cleared without a read operation, MAC may provide</td></tr>
+<tr><td>incorrect Rx status for the MAC control frames when receive checksum</td></tr>
+<tr><td>offload is enabled, MAC may provide an inaccurate Rx status when receive</td></tr>
+<tr><td>checksum offload is enabled in cut-through mode and MAC may not drop</td></tr>
+<tr><td>received giant error frames errata.</td></tr>
+<tr><td>Added Section Important security notice.</td></tr>
+<tr><td>12-Feb-2024</td><td class="merged-cell">15</td><td>Updated errata: PC13 signal transitions disturb LSE</td></tr>
+<tr><td>10-Jul-2024</td><td class="merged-cell">16</td><td>Updated the order of functions in Table 3. Summary of device limitations.</td></tr>
+<tr><td>27-Jan-2025</td><td class="merged-cell">17</td><td>Master and slave terms in I2C replaced with controller and target,</td></tr>
+<tr><td>respectively.</td></tr>
+<tr><td>Added errata: Corrupted content of the backup domain due to a missed</td></tr>
+<tr><td>power-on reset after this domain supply voltage drop</td></tr>
+<tr><td>24-Feb-2025</td><td class="merged-cell">18</td><td>Corrupted content of the backup domain due to a missed power-on reset after</td></tr>
+<tr><td>this domain supply voltage drop updated.</td></tr>
+</table>
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 2
+        </caption>
+<tr><th>ES0182 - Rev 18 page 41/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 42</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      3331 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Contents
+Contents
+1 Summary of device errata..........................................................2
+2 Description of device errata........................................................7
+2.1 Core .........................................................................7
+2.1.1 Interrupted loads to SP can cause erroneous behavior............................7
+2.1.2 VDIV or VSQRT instructions might not complete correctly when very short ISRs are used.7
+2.1.3 Store immediate overlapping exception return operation might vector to incorrect interrupt 8
+2.2 Sys</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 42/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 43</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      3442 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Contents
+2.4.2 Wrong CCRCFAIL status after a response without CRC is received................. 16
+2.4.3 SDIO clock divider Bypass mode may not work properly ......................... 16
+2.4.4 Data corruption in SDIO clock dephasing (NEGEDGE) mode...................... 16
+2.4.5 CE-ATA multiple write command and card busy signal management ................ 16
+2.4.6 No underrun detection with wrong data transmission ............................ 17
+2.5 ADC ........................................................................17
+2.5.1 ADC sequencer modification</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 43/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 44</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      3557 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Contents
+2.11.1 Idle frame is not detected if the receiver clock speed is deviated ................... 25
+2.11.2 In full-duplex mode, the Parity Error (PE) flag can be cleared by writing to the data
+register ............................................................... 25
+2.11.3 Parity Error (PE) flag is not set when receiving in Mute mode using address mark
+detection.............................................................. 25
+2.11.4 Break frame is transmitted regardless of CTS input line status..................... 26
+2.11.5 RTS signal abnormally dri</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 44/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 45</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      1733 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+Contents
+2.16.1 Incorrect L3 checksum is inserted in transmitted IPv6 packets without TCP, UDP or
+ICMP payloads ......................................................... 32
+2.16.2 The Ethernet MAC processes invalid extension headers in the received IPv6 frames.... 32
+2.16.3 MAC stuck in the idle state on receiving the TxFIFO flush command exactly one
+clock cycle after a transmission completes .................................... 33
+2.16.4 Transmit frame data corruption............................................. 33
+2.16.5 Incorrect status and corrupted fram</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 45/46</th></tr>
+</table></div></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">Page 46</span>
+    <div class="badges"><span class="badge badge-text">TEXT</span><span class="badge badge-table">TABLE</span></div>
+    <span style="font-size:11px;color:#858585;">
+      1346 chars total
+    </span>
+  </div>
+  <div class="page-content">
+    <div class="text-panel">
+      <div class="panel-label">Extracted Text</div>
+      <div class="raw-text">STM32F405/407xx and STM32F415/417xx
+IMPORTANT NOTICE – READ CAREFULLY
+STMicroelectronics NV and its subsidiaries (“ST”) reserve the right to make changes, corrections, enhancements, modifications, and improvements to ST
+products and/or to this document at any time without notice. Purchasers should obtain the latest relevant information on ST products before placing orders. ST
+products are sold pursuant to ST’s terms and conditions of sale in place at the time of order acknowledgment.
+Purchasers are solely responsible for the choice, selection, and use of ST products and ST assumes no liability</div>
+    </div>
+    <div class="table-panel">
+      <div class="panel-label">
+        Extracted Tables (1 found)
+      </div>
+
+      <table class="extracted">
+        <caption style="color:#858585;font-size:11px;
+                        text-align:left;margin-bottom:4px;">
+          Table 1
+        </caption>
+<tr><th>ES0182 - Rev 18 page 46/46</th></tr>
+</table></div></div></div>
+<h2 id="tables">🗂 Raw Tables (Direct from pdfplumber)</h2>
+<div class="section-stats">
+  61 tables extracted directly — 
+  this is what pdfplumber sees before any processing.
+  Highlighted cells: blue = possibly merged/empty cells.
+</div>
+
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 1 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      5 rows × 2 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th>Reference</th><th>Part numbers</th></tr>
+<tr><td>STM32F405xx</td><td>STM32F405OG, STM32F405OE, STM32F405RG, STM32F405VG, STM32F405ZG</td></tr>
+<tr><td>STM32F407xx</td><td>STM32F407IG, STM32F407VG, STM32F407ZG, STM32F407ZE, STM32F407IE, STM32F407VE</td></tr>
+<tr><td>STM32F415xx</td><td>STM32F415OG, STM32F415RG, STM32F415VG, STM32F415ZG</td></tr>
+<tr><td>STM32F417xx</td><td>STM32F417VG, STM32F417IG, STM32F417ZG, STM32F417VE, STM32F417ZE, STM32F417IE</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 1 — Table 2
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      10 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>Silicon revision codes</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td>Reference</td><td>Device marking(1)</td><td>REV_ID(2)</td></tr>
+<tr><td>STM32F405xx, STM32F407xx,
+STM32F415xx, STM32F417xx</td><td>A</td><td>0x1000</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>Z</td><td>0x1001</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>1</td><td>0x1003</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2</td><td>0x1007</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>Y</td><td>0x100F</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>4</td><td class="merged-cell">(merged/empty)</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>5</td><td>0x101F</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>6</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 1 — Table 3
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 - February 2025 www.st.com
+For further information, contact your local STMicroelectronics sales office.</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 2 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      21 rows × 11 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>Core</td><td>2.1.1</td><td>Interrupted loads to SP can cause erroneous
+behavior</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.1.2</td><td>VDIV or VSQRT instructions might not
+complete correctly when very short ISRs are
+used</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.1.3</td><td>Store immediate overlapping exception return
+operation might vector to incorrect interrupt</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>System</td><td>2.2.1</td><td>ART Accelerator prefetch queue instruction is
+not supported</td><td>N</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.2</td><td>MCU device ID is incorrect</td><td>A</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.3</td><td>Debugging Stop mode and SysTick timer</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.4</td><td>Debugging Stop mode with WFE entry</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.5</td><td>Debugging Sleep/Stop mode with WFE/WFI
+entry</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.6</td><td>Wake-up sequence from Standby mode when
+using more than one wake-up source</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.7</td><td>Full JTAG configuration without NJTRST pin
+cannot be used</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.8</td><td>PDR_ON pin not available on LQFP100
+package except for revision A devices</td><td>-</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.9</td><td>Incorrect BOR option byte when consecutively
+programming BOR option byte</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.10</td><td>Configuration of PH10 and PI10 as external
+interrupts is erroneous</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.11</td><td>Slowing down APB clock during a DMA
+transfer</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.12</td><td>MPU attribute to RTC and IWDG registers
+incorrectly managed</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.13</td><td>Delay after an RCC peripheral clock enabling</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.14</td><td>Battery charge monitoring lower than 2.4 V</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.15</td><td>Internal noise impacting the ADC accuracy</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.16</td><td>RDP level 2 and sector write protection
+configuration</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 2 — Table 2
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 2/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 3 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      26 rows × 11 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>System</td><td>2.2.17</td><td>Possible delay in backup domain protection
+disabling/enabling after programming the DBP
+bit</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.18</td><td>PC13 signal transitions disturb LSE</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.19</td><td>In some specific cases, DMA2 data corruption
+occurs when managing AHB and APB2
+peripherals in a concurrent way</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.2.20</td><td>Corrupted content of the backup domain due
+to a missed power-on reset after this domain
+supply voltage drop</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>FSMC</td><td>2.3.1</td><td>Dummy read cycles inserted when reading
+synchronous memories</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.3.2</td><td>FSMC synchronous mode and NWAIT signal
+disabled</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.3.3</td><td>FSMC NOR/PSRAM controller: asynchronous
+read access on bank 2 to 4 returns wrong data
+when bank 1 is in synchronous mode
+(BURSTEN bit is set)</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>SDIO</td><td>2.4.1</td><td>Wrong data written during SDIO hardware flow
+control</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.4.2</td><td>Wrong CCRCFAIL status after a response
+without CRC is received</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.4.3</td><td>SDIO clock divider Bypass mode may not
+work properly</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.4.4</td><td>Data corruption in SDIO clock dephasing
+(NEGEDGE) mode</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.4.5</td><td>CE-ATA multiple write command and card
+busy signal management</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.4.6</td><td>No underrun detection with wrong data
+transmission</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>ADC</td><td>2.5.1</td><td>ADC sequencer modification during
+conversion</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>DAC</td><td>2.6.1</td><td>DMA request not automatically cleared by
+clearing DMAEN</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.6.2</td><td>DMA underrun flag not set when an internal
+trigger is detected on the clock cycle of the
+DMA request acknowledge</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td>TIM</td><td>2.7.1</td><td>PWM re-enabled in automatic output enable
+mode despite of system break</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.7.3</td><td>Consecutive compare event missed in specific
+conditions</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.7.4</td><td>Output compare clear not working with
+external counter reset</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+<tr><td>IWDG</td><td>2.8.1</td><td>RVU flag not reset in Stop</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.8.2</td><td>PVU flag not reset in Stop</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.8.3</td><td>RVU flag not cleared at low APB clock
+frequency</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.8.4</td><td>PVU flag not cleared at low APB clock
+frequency</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>RTC</td><td>2.9.1</td><td>Spurious tamper detection when disabling the
+tamper channel</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 3 — Table 2
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 3/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 4 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      27 rows × 11 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>RTC</td><td>2.9.2</td><td>RTC calendar registers are not locked properly</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.9.3</td><td>RTC interrupt can be masked by another RTC
+interrupt</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.9.4</td><td>Calendar initialization may fail in case of
+consecutive INIT mode entry</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.9.5</td><td>Alarm flag may be repeatedly set when the
+core is stopped in debug</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.9.6</td><td>Detection of a tamper event occurring before
+enabling the tamper detection is not supported
+in edge detection mode</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>I2C</td><td>2.10.1</td><td>Spurious bus error detection in controller
+mode</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.10.2</td><td>SMBus standard not fully supported</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.10.3</td><td>Start cannot be generated after a misplaced
+Stop</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.10.4</td><td>Mismatch on the “Setup time for a repeated
+Start condition” timing parameter</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.10.5</td><td>Data valid time (tVD;DAT) violated without the
+OVR flag being set</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.10.6</td><td>Both SDA and SCL maximum rise times (tr)
+violated when the VDD_I2C bus voltage is
+higher than ((VDD + 0.3) / 0.7) V</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>USART</td><td>2.11.1</td><td>Idle frame is not detected if the receiver clock
+speed is deviated</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.11.2</td><td>In full-duplex mode, the Parity Error (PE) flag
+can be cleared by writing to the data register</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.11.3</td><td>Parity Error (PE) flag is not set when receiving
+in Mute mode using address mark detection</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.11.4</td><td>Break frame is transmitted regardless of CTS
+input line status</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.11.5</td><td>RTS signal abnormally driven low after a
+protocol violation</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.11.6</td><td>Start bit detected too soon when sampling for
+NACK signal from the smartcard</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.11.7</td><td>Break request can prevent the transmission
+complete flag (TC) from being set</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.11.8</td><td>Guard time not respected when data are sent
+on TXE events</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.11.9</td><td>RTS is active while RE or UE = 0</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>SPI/I2S</td><td>2.12.1</td><td>BSY bit may stay high when SPI is disabled</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.12.2</td><td>Anticipated communication upon SPI transit
+from slave receiver to master</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.12.3</td><td>Wrong CRC calculation when the polynomial
+is even</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.12.4</td><td>Corrupted last bit of data and/or CRC received
+in Master mode with delayed SCK feedback</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.12.5</td><td>BSY flag may stay high at the end of a data
+transfer in Slave mode</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 4 — Table 2
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 4/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 5 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      23 rows × 11 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>SPI/I2S</td><td>2.12.6</td><td>In I2S Slave mode, the WS level must be set
+by the external master when enabling the I2S</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.12.7</td><td>I2S2 in full-duplex mode may not work
+properly when SCK and WS signals are
+mapped on PI1 and PI0, respectively</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>bxCAN</td><td>2.13.1</td><td>bxCAN time-triggered communication mode
+not supported</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td>OTG_FS</td><td>2.14.1</td><td>Transmit data FIFO is corrupted when a write
+sequence to the FIFO is interrupted with
+accesses to certain OTG_FS registers</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.14.2</td><td>Host packet transmission may hang when
+connecting through a hub to a low-speed
+device</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.14.3</td><td>Data in RxFIFO is overwritten when all
+channels are disabled simultaneously</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.14.4</td><td>OTG host blocks the receive channel when
+receiving IN packets and no TxFIFO is
+configured</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.14.5</td><td>Host channel-halted interrupt not generated
+when the channel is disabled</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.14.6</td><td>Wrong software-read OTG_FS_DCFG register
+values</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td>OTG_HS</td><td>2.15.1</td><td>Transmit data FIFO is corrupted when a write
+sequence to the FIFO is interrupted with
+accesses to certain OTG_HS registers</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.15.2</td><td>Host packet transmission may hang when
+connecting the full speed interface through a
+hub to a low-speed device</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td>ETH</td><td>2.16.1</td><td>Incorrect L3 checksum is inserted in
+transmitted IPv6 packets without TCP, UDP or
+ICMP payloads</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.16.2</td><td>The Ethernet MAC processes invalid
+extension headers in the received IPv6 frames</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.16.3</td><td>MAC stuck in the idle state on receiving the
+TxFIFO flush command exactly one clock
+cycle after a transmission completes</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.16.4</td><td>Transmit frame data corruption</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.16.5</td><td>Incorrect status and corrupted frames when
+RxFIFO overflow occurs on the penultimate
+word of Rx frames</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.16.6</td><td>Successive write operations to the same
+register might not be fully taken into account</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.16.7</td><td>Incorrect remote wakeup on global unicast
+packet</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.16.8</td><td>Overflow status bits of missed frame and
+buffer overflow counters are cleared without a
+read operation</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.16.9</td><td>MAC may provide incorrect Rx status for the
+MAC control frames when receive checksum
+offload is enabled</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td>2.16.10</td><td>MAC may provide an inaccurate Rx status
+when receive checksum offload is enabled in
+cut-through mode</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 5 — Table 2
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 5/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 6 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      3 rows × 11 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th>Function</th><th>Section</th><th>Limitation</th><th>Status</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td>Rev. A</td><td>Rev. Z</td><td>Rev. 1</td><td>Rev. 2</td><td>Rev. Y</td><td>Rev. 4</td><td>Rev. 5</td><td>Rev. 6</td></tr>
+<tr><td>ETH</td><td>2.16.11</td><td>MAC may not drop received giant error frames</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td><td>A</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 6 — Table 2
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th>Function</th><th>Section</th><th>Documentation erratum</th></tr>
+<tr><td>TIM</td><td>2.7.2</td><td>TRGO and TRGO2 trigger output failure</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 6 — Table 3
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 6/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 7 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 7/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 8 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 8/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 9 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 9/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 10 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 10/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 11 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 11/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div>
+<div class="page-block">
+  <div class="page-header">
+    <span class="page-num">
+      Page 12 — Table 1
+    </span>
+    <span style="font-size:11px;color:#858585;">
+      2 rows × 3 cols
+    </span>
+  </div>
+  <div style="padding:12px 16px;overflow-x:auto;">
+    <table class="extracted">
+<tr><th class="merged-cell">(merged/empty)</th><th>ES0182 - Rev 18 page 12/46</th><th class="merged-cell">(merged/empty)</th></tr>
+<tr><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td><td class="merged-cell">(merged/empty)</td></tr>
+</table></div></div><p style="color:#858585;">... and 41 more tables. Showing first 20 only.</p>
+<h2 id="chunks">🔪 All Chunks (first 30)</h2>
+<div class="section-stats">
+  Total: 344 chunks |
+  🟡 Yellow border = contains table |
+  🔴 Red border = contains errata keyword |
+  🟢 Green border = normal text chunk
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 0 &nbsp;|&nbsp;
+      Page 1 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">STM32F405/407xx and STM32F415/417xx
+Errata sheet
+STM32F405/407xx and STM32F415/417xx device errata
+Applicability
+This document applies to the part numbers of STM32F405/407xx and STM32F415/417xx devices and the device variants as
+stated in this page.
+It gives a summary and a description of the device errata, with respect to the device datasheet and reference manual RM0090.
+Deviation of the real dev</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 1 &nbsp;|&nbsp;
+      Page 1 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">e intended device behavior is considered to be a device limitation. Deviation of the
+description in the reference manual or the datasheet from the intended device behavior is considered to be a documentation
+erratum. The term “errata” applies both to limitations and documentation errata.
+Table 1. Device summary
+Reference Part numbers
+STM32F405xx STM32F405OG, STM32F405OE, STM32F405RG, STM32F405VG, </div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 2 &nbsp;|&nbsp;
+      Page 1 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">7xx STM32F407IG, STM32F407VG, STM32F407ZG, STM32F407ZE, STM32F407IE, STM32F407VE
+STM32F415xx STM32F415OG, STM32F415RG, STM32F415VG, STM32F415ZG
+STM32F417xx STM32F417VG, STM32F417IG, STM32F417ZG, STM32F417VE, STM32F417ZE, STM32F417IE
+Table 2. Device variants
+Silicon revision codes
+Reference
+Device marking(1) REV_ID(2)
+A 0x1000
+Z 0x1001
+1 0x1003
+2 0x1007
+STM32F405xx, STM32F407xx,
+STM32F415xx, STM32F</div>
+</div>
+
+<div class="chunk-block chunk-has-table">
+  <div class="chunk-header">
+    <span>
+      Chunk 3 &nbsp;|&nbsp;
+      Page 1 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟡 TABLE</span>
+  </div>
+  <div class="chunk-text">x101F
+6
+1. Refer to the device datasheet for how to identify this code on different types of package.
+2. REV_ID[15:0] bitfield of DBGMCU_IDCODE register.
+ES0182 - Rev 18 - February 2025 www.st.com
+For further information, contact your local STMicroelectronics sales office.
+
+[TABLE]
+Reference | Part numbers
+STM32F405xx | STM32F405OG, STM32F405OE, STM32F405RG, STM32F405VG, STM32F405ZG
+STM32F407xx | </div>
+</div>
+
+<div class="chunk-block chunk-has-table">
+  <div class="chunk-header">
+    <span>
+      Chunk 4 &nbsp;|&nbsp;
+      Page 1 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟡 TABLE</span>
+  </div>
+  <div class="chunk-text">07VG, STM32F407ZG, STM32F407ZE, STM32F407IE, STM32F407VE
+STM32F415xx | STM32F415OG, STM32F415RG, STM32F415VG, STM32F415ZG
+STM32F417xx | STM32F417VG, STM32F417IG, STM32F417ZG, STM32F417VE, STM32F417ZE, STM32F417IE
+[/TABLE]
+
+[TABLE]
+Silicon revision codes
+Reference | Device marking(1) | REV_ID(2)
+STM32F405xx, STM32F407xx,
+STM32F415xx, STM32F417xx | A | 0x1000
+Z | 0x1001
+1 | 0x1003
+2 | 0x1007
+Y | 0x1</div>
+</div>
+
+<div class="chunk-block chunk-has-table">
+  <div class="chunk-header">
+    <span>
+      Chunk 5 &nbsp;|&nbsp;
+      Page 1 &nbsp;|&nbsp;
+      145 chars
+    </span>
+    <span>🟡 TABLE</span>
+  </div>
+  <div class="chunk-text">/TABLE]
+
+[TABLE]
+ES0182 - Rev 18 - February 2025 www.st.com
+For further information, contact your local STMicroelectronics sales office.
+[/TABLE]</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 0 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+1 Summary of device errata
+The following table gives a quick reference to the STM32F405/407xx and STM32F415/417xx device limitations
+and their status:
+A = limitation present, workaround available
+N = limitation present, no workaround available
+P = limitation present, partial workaround available
+“-” = limitation absent
+Applicability of a</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 1 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">nd on specific conditions of target application. Adoption of a workaround
+may cause restrictions to target application. Workaround for a limitation is deemed partial if it only reduces the
+rate of occurrence and/or consequences of the limitation, or if it is fully effective for only a subset of instances on
+the device or in only a subset of operating modes, of the function concerned.
+Table 3. Summ</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 2 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      499 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">tions
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+Interrupted loads to SP can cause erroneous
+2.1.1 A A A A A A A A
+behavior
+VDIV or VSQRT instructions might not
+Core 2.1.2 complete correctly when very short ISRs are A A A A A A A A
+used
+Store immediate overlapping exception return
+2.1.3 A A A A A A A A
+operation might vector to incorrect interrupt
+AR</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 3 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">ch queue instruction is
+2.2.1 N - - - - - - -
+not supported
+2.2.2 MCU device ID is incorrect A - - - - - - -
+2.2.3 Debugging Stop mode and SysTick timer A A A A A A A A
+2.2.4 Debugging Stop mode with WFE entry A A A A A A A A
+Debugging Sleep/Stop mode with WFE/WFI
+2.2.5 A A A A A A A A
+entry
+Wake-up sequence from Standby mode when
+2.2.6 A A A A A A A A
+using more than one wake-up source
+Full JTAG </div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 4 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">t NJTRST pin
+2.2.7 A A A A A A A A
+cannot be used
+PDR_ON pin not available on LQFP100
+2.2.8 - N N N N N N N
+package except for revision A devices
+System
+Incorrect BOR option byte when consecutively
+2.2.9 A A A A A A A A
+programming BOR option byte
+Configuration of PH10 and PI10 as external
+2.2.10 N N N N N N N N
+interrupts is erroneous
+Slowing down APB clock during a DMA
+2.2.11 A A A A A A A A
+tra</div>
+</div>
+
+<div class="chunk-block chunk-has-table">
+  <div class="chunk-header">
+    <span>
+      Chunk 5 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟡 TABLE</span>
+  </div>
+  <div class="chunk-text">to RTC and IWDG registers
+2.2.12 A A A A A A A A
+incorrectly managed
+2.2.13 Delay after an RCC peripheral clock enabling A A A A A A A A
+2.2.14 Battery charge monitoring lower than 2.4 V P P P P P P P P
+2.2.15 Internal noise impacting the ADC accuracy A A A A A A A A
+RDP level 2 and sector write protection
+2.2.16 A A A A A A A A
+configuration
+ES0182 - Rev 18 page 2/46
+
+[TABLE]
+Function | Section |</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 6 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      499 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">Rev. A | Rev. Z | Rev. 1 | Rev. 2 | Rev. Y | Rev. 4 | Rev. 5 | Rev. 6
+Core | 2.1.1 | Interrupted loads to SP can cause erroneous
+behavior | A | A | A | A | A | A | A | A
+2.1.2 | VDIV or VSQRT instructions might not
+complete correctly when very short ISRs are
+used | A | A | A | A | A | A | A | A
+2.1.3 | Store immediate overlapping exception return
+operation might vector to incorrect interrupt | A |</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 7 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">| A | A
+System | 2.2.1 | ART Accelerator prefetch queue instruction is
+not supported | N | - | - | - | - | - | - | -
+2.2.2 | MCU device ID is incorrect | A | - | - | - | - | - | - | -
+2.2.3 | Debugging Stop mode and SysTick timer | A | A | A | A | A | A | A | A
+2.2.4 | Debugging Stop mode with WFE entry | A | A | A | A | A | A | A | A
+2.2.5 | Debugging Sleep/Stop mode with WFE/WFI
+entry | A | A | </div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 8 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">A
+2.2.6 | Wake-up sequence from Standby mode when
+using more than one wake-up source | A | A | A | A | A | A | A | A
+2.2.7 | Full JTAG configuration without NJTRST pin
+cannot be used | A | A | A | A | A | A | A | A
+2.2.8 | PDR_ON pin not available on LQFP100
+package except for revision A devices | - | N | N | N | N | N | N | N
+2.2.9 | Incorrect BOR option byte when consecutively
+programming BOR op</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 9 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">A | A | A | A | A | A
+2.2.10 | Configuration of PH10 and PI10 as external
+interrupts is erroneous | N | N | N | N | N | N | N | N
+2.2.11 | Slowing down APB clock during a DMA
+transfer | A | A | A | A | A | A | A | A
+2.2.12 | MPU attribute to RTC and IWDG registers
+incorrectly managed | A | A | A | A | A | A | A | A
+2.2.13 | Delay after an RCC peripheral clock enabling | A | A | A | A | A | A | A |</div>
+</div>
+
+<div class="chunk-block chunk-has-table">
+  <div class="chunk-header">
+    <span>
+      Chunk 10 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      297 chars
+    </span>
+    <span>🟡 TABLE</span>
+  </div>
+  <div class="chunk-text">charge monitoring lower than 2.4 V | P | P | P | P | P | P | P | P
+2.2.15 | Internal noise impacting the ADC accuracy | A | A | A | A | A | A | A | A
+2.2.16 | RDP level 2 and sector write protection
+configuration | A | A | A | A | A | A | A | A
+[/TABLE]
+
+[TABLE]
+ES0182 - Rev 18 page 2/46
+[/TABLE]</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 0 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+Possible delay in backup domain protection
+2.2.17 disabling/enabling after programming the DBP A A A A A A A A
+bit
+2.2.18 PC13 signal transitions disturb LSE N N N N N N N N
+System In some specific cases, DMA2 data corruption
+2.2.19 occurs when man</div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 1 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      498 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">A A A A A A A
+peripherals in a concurrent way
+Corrupted content of the backup domain due
+2.2.20 to a missed power-on reset after this domain A A A A A A A A
+supply voltage drop
+Dummy read cycles inserted when reading
+2.3.1 N N N N N N N N
+synchronous memories
+FSMC synchronous mode and NWAIT signal
+2.3.2 A A A A A A A A
+disabled
+FSMC
+FSMC NOR/PSRAM controller: asynchronous
+read access on bank 2 to </div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 2 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">a
+2.3.3 A A A A A A A A
+when bank 1 is in synchronous mode
+(BURSTEN bit is set)
+Wrong data written during SDIO hardware flow
+2.4.1 N N N N N N N N
+control
+Wrong CCRCFAIL status after a response
+2.4.2 A A A A A A A A
+without CRC is received
+SDIO clock divider Bypass mode may not
+2.4.3 A A A A A A A A
+work properly
+SDIO
+Data corruption in SDIO clock dephasing
+2.4.4 N N N N N N N N
+(NEGEDGE) mode
+CE-</div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 3 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">ommand and card
+2.4.5 A A A A A A A A
+busy signal management
+No underrun detection with wrong data
+2.4.6 A A A A A A A A
+transmission
+ADC sequencer modification during
+ADC 2.5.1 A A A A A A A A
+conversion
+DMA request not automatically cleared by
+2.6.1 A A A A A A A A
+clearing DMAEN
+DAC
+DMA underrun flag not set when an internal
+2.6.2 trigger is detected on the clock cycle of the N N N N N N N N
+DM</div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 4 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">e
+PWM re-enabled in automatic output enable
+2.7.1 P P P P P P P P
+mode despite of system break
+Consecutive compare event missed in specific
+TIM 2.7.3 N N N N N N N N
+conditions
+Output compare clear not working with
+2.7.4 P P P P P P P P
+external counter reset
+2.8.1 RVU flag not reset in Stop A A A A A A A A
+2.8.2 PVU flag not reset in Stop A A A A A A A A
+IWDG RVU flag not cleared at low APB clock</div>
+</div>
+
+<div class="chunk-block chunk-has-table">
+  <div class="chunk-header">
+    <span>
+      Chunk 5 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      499 chars
+    </span>
+    <span>🟡 TABLE</span>
+  </div>
+  <div class="chunk-text">A
+frequency
+PVU flag not cleared at low APB clock
+2.8.4 A A A A A A A A
+frequency
+Spurious tamper detection when disabling the
+RTC 2.9.1 N N N N N N N N
+tamper channel
+ES0182 - Rev 18 page 3/46
+
+[TABLE]
+Function | Section | Limitation | Status
+Rev. A | Rev. Z | Rev. 1 | Rev. 2 | Rev. Y | Rev. 4 | Rev. 5 | Rev. 6
+System | 2.2.17 | Possible delay in backup domain protection
+disabling/enabling after </div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 6 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      499 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">bit | A | A | A | A | A | A | A | A
+2.2.18 | PC13 signal transitions disturb LSE | N | N | N | N | N | N | N | N
+2.2.19 | In some specific cases, DMA2 data corruption
+occurs when managing AHB and APB2
+peripherals in a concurrent way | A | A | A | A | A | A | A | A
+2.2.20 | Corrupted content of the backup domain due
+to a missed power-on reset after this domain
+supply voltage drop | A | A | A | A | </div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 7 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">| 2.3.1 | Dummy read cycles inserted when reading
+synchronous memories | N | N | N | N | N | N | N | N
+2.3.2 | FSMC synchronous mode and NWAIT signal
+disabled | A | A | A | A | A | A | A | A
+2.3.3 | FSMC NOR/PSRAM controller: asynchronous
+read access on bank 2 to 4 returns wrong data
+when bank 1 is in synchronous mode
+(BURSTEN bit is set) | A | A | A | A | A | A | A | A
+SDIO | 2.4.1 | Wrong data w</div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 8 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">ardware flow
+control | N | N | N | N | N | N | N | N
+2.4.2 | Wrong CCRCFAIL status after a response
+without CRC is received | A | A | A | A | A | A | A | A
+2.4.3 | SDIO clock divider Bypass mode may not
+work properly | A | A | A | A | A | A | A | A
+2.4.4 | Data corruption in SDIO clock dephasing
+(NEGEDGE) mode | N | N | N | N | N | N | N | N
+2.4.5 | CE-ATA multiple write command and card
+busy sign</div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 9 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">A | A | A | A | A | A | A
+2.4.6 | No underrun detection with wrong data
+transmission | A | A | A | A | A | A | A | A
+ADC | 2.5.1 | ADC sequencer modification during
+conversion | A | A | A | A | A | A | A | A
+DAC | 2.6.1 | DMA request not automatically cleared by
+clearing DMAEN | A | A | A | A | A | A | A | A
+2.6.2 | DMA underrun flag not set when an internal
+trigger is detected on the clock cycle </div>
+</div>
+
+<div class="chunk-block chunk-normal">
+  <div class="chunk-header">
+    <span>
+      Chunk 10 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🟢 TEXT</span>
+  </div>
+  <div class="chunk-text">cknowledge | N | N | N | N | N | N | N | N
+TIM | 2.7.1 | PWM re-enabled in automatic output enable
+mode despite of system break | P | P | P | P | P | P | P | P
+2.7.3 | Consecutive compare event missed in specific
+conditions | N | N | N | N | N | N | N | N
+2.7.4 | Output compare clear not working with
+external counter reset | P | P | P | P | P | P | P | P
+IWDG | 2.8.1 | RVU flag not reset in Stop |</div>
+</div>
+
+<div class="chunk-block chunk-has-table">
+  <div class="chunk-header">
+    <span>
+      Chunk 11 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      411 chars
+    </span>
+    <span>🟡 TABLE</span>
+  </div>
+  <div class="chunk-text">A | A | A
+2.8.2 | PVU flag not reset in Stop | A | A | A | A | A | A | A | A
+2.8.3 | RVU flag not cleared at low APB clock
+frequency | A | A | A | A | A | A | A | A
+2.8.4 | PVU flag not cleared at low APB clock
+frequency | A | A | A | A | A | A | A | A
+RTC | 2.9.1 | Spurious tamper detection when disabling the
+tamper channel | N | N | N | N | N | N | N | N
+[/TABLE]
+
+[TABLE]
+ES0182 - Rev 18 page 3/</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 0 &nbsp;|&nbsp;
+      Page 4 &nbsp;|&nbsp;
+      500 chars
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+2.9.2 RTC calendar registers are not locked properly A A A A A A A A
+RTC interrupt can be masked by another RTC
+2.9.3 A A A A A A A A
+interrupt
+Calendar initialization may fail in case of
+2.9.4 A A A A A A A A
+consecutive INIT mode entry
+RTC
+Alarm </div>
+</div>
+
+<h2 id="errata">🔴 Errata-Specific Chunks (212 found)</h2>
+<div class="section-stats">
+  These chunks contain errata keywords and will be retrieved
+  when the LLM needs to check for silicon bugs and workarounds.
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 0 &nbsp;|&nbsp;
+      Page 1 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">STM32F405/407xx and STM32F415/417xx
+Errata sheet
+STM32F405/407xx and STM32F415/417xx device errata
+Applicability
+This document applies to the part numbers of STM32F405/407xx and STM32F415/417xx devices and the device variants as
+stated in this page.
+It gives a summary and a description of the device errata, with respect to the device datasheet and reference manual RM0090.
+Deviation of the real device behavior from the intended device behavior is considered to be a device limitation. Deviation of</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 1 &nbsp;|&nbsp;
+      Page 1 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">e intended device behavior is considered to be a device limitation. Deviation of the
+description in the reference manual or the datasheet from the intended device behavior is considered to be a documentation
+erratum. The term “errata” applies both to limitations and documentation errata.
+Table 1. Device summary
+Reference Part numbers
+STM32F405xx STM32F405OG, STM32F405OE, STM32F405RG, STM32F405VG, STM32F405ZG
+STM32F407xx STM32F407IG, STM32F407VG, STM32F407ZG, STM32F407ZE, STM32F407IE, STM32F407VE</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 0 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+1 Summary of device errata
+The following table gives a quick reference to the STM32F405/407xx and STM32F415/417xx device limitations
+and their status:
+A = limitation present, workaround available
+N = limitation present, no workaround available
+P = limitation present, partial workaround available
+“-” = limitation absent
+Applicability of a workaround may depend on specific conditions of target application. Adoption of a workaround
+may ca</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 1 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">nd on specific conditions of target application. Adoption of a workaround
+may cause restrictions to target application. Workaround for a limitation is deemed partial if it only reduces the
+rate of occurrence and/or consequences of the limitation, or if it is fully effective for only a subset of instances on
+the device or in only a subset of operating modes, of the function concerned.
+Table 3. Summary of device limitations
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev.</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 2 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">tions
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+Interrupted loads to SP can cause erroneous
+2.1.1 A A A A A A A A
+behavior
+VDIV or VSQRT instructions might not
+Core 2.1.2 complete correctly when very short ISRs are A A A A A A A A
+used
+Store immediate overlapping exception return
+2.1.3 A A A A A A A A
+operation might vector to incorrect interrupt
+ART Accelerator prefetch queue instruction is
+2.2.1 N - - - - - - -
+not supported
+2.2.2 MCU device ID</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 3 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">ch queue instruction is
+2.2.1 N - - - - - - -
+not supported
+2.2.2 MCU device ID is incorrect A - - - - - - -
+2.2.3 Debugging Stop mode and SysTick timer A A A A A A A A
+2.2.4 Debugging Stop mode with WFE entry A A A A A A A A
+Debugging Sleep/Stop mode with WFE/WFI
+2.2.5 A A A A A A A A
+entry
+Wake-up sequence from Standby mode when
+2.2.6 A A A A A A A A
+using more than one wake-up source
+Full JTAG configuration without NJTRST pin
+2.2.7 A A A A A A A A
+cannot be used
+PDR_ON pin not available on LQ</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 4 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">t NJTRST pin
+2.2.7 A A A A A A A A
+cannot be used
+PDR_ON pin not available on LQFP100
+2.2.8 - N N N N N N N
+package except for revision A devices
+System
+Incorrect BOR option byte when consecutively
+2.2.9 A A A A A A A A
+programming BOR option byte
+Configuration of PH10 and PI10 as external
+2.2.10 N N N N N N N N
+interrupts is erroneous
+Slowing down APB clock during a DMA
+2.2.11 A A A A A A A A
+transfer
+MPU attribute to RTC and IWDG registers
+2.2.12 A A A A A A A A
+incorrectly managed
+2.2.13 Dela</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 5 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">to RTC and IWDG registers
+2.2.12 A A A A A A A A
+incorrectly managed
+2.2.13 Delay after an RCC peripheral clock enabling A A A A A A A A
+2.2.14 Battery charge monitoring lower than 2.4 V P P P P P P P P
+2.2.15 Internal noise impacting the ADC accuracy A A A A A A A A
+RDP level 2 and sector write protection
+2.2.16 A A A A A A A A
+configuration
+ES0182 - Rev 18 page 2/46
+
+[TABLE]
+Function | Section | Limitation | Status
+Rev. A | Rev. Z | Rev. 1 | Rev. 2 | Rev. Y | Rev. 4 | Rev. 5 | Rev. 6
+Core | 2.</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 6 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">Rev. A | Rev. Z | Rev. 1 | Rev. 2 | Rev. Y | Rev. 4 | Rev. 5 | Rev. 6
+Core | 2.1.1 | Interrupted loads to SP can cause erroneous
+behavior | A | A | A | A | A | A | A | A
+2.1.2 | VDIV or VSQRT instructions might not
+complete correctly when very short ISRs are
+used | A | A | A | A | A | A | A | A
+2.1.3 | Store immediate overlapping exception return
+operation might vector to incorrect interrupt | A | A | A | A | A | A | A | A
+System | 2.2.1 | ART Accelerator prefetch queue instruction is
+not suppo</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 7 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">| A | A
+System | 2.2.1 | ART Accelerator prefetch queue instruction is
+not supported | N | - | - | - | - | - | - | -
+2.2.2 | MCU device ID is incorrect | A | - | - | - | - | - | - | -
+2.2.3 | Debugging Stop mode and SysTick timer | A | A | A | A | A | A | A | A
+2.2.4 | Debugging Stop mode with WFE entry | A | A | A | A | A | A | A | A
+2.2.5 | Debugging Sleep/Stop mode with WFE/WFI
+entry | A | A | A | A | A | A | A | A
+2.2.6 | Wake-up sequence from Standby mode when
+using more than one wake-up so</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 8 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">A
+2.2.6 | Wake-up sequence from Standby mode when
+using more than one wake-up source | A | A | A | A | A | A | A | A
+2.2.7 | Full JTAG configuration without NJTRST pin
+cannot be used | A | A | A | A | A | A | A | A
+2.2.8 | PDR_ON pin not available on LQFP100
+package except for revision A devices | - | N | N | N | N | N | N | N
+2.2.9 | Incorrect BOR option byte when consecutively
+programming BOR option byte | A | A | A | A | A | A | A | A
+2.2.10 | Configuration of PH10 and PI10 as external
+interr</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 9 &nbsp;|&nbsp;
+      Page 2 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">A | A | A | A | A | A
+2.2.10 | Configuration of PH10 and PI10 as external
+interrupts is erroneous | N | N | N | N | N | N | N | N
+2.2.11 | Slowing down APB clock during a DMA
+transfer | A | A | A | A | A | A | A | A
+2.2.12 | MPU attribute to RTC and IWDG registers
+incorrectly managed | A | A | A | A | A | A | A | A
+2.2.13 | Delay after an RCC peripheral clock enabling | A | A | A | A | A | A | A | A
+2.2.14 | Battery charge monitoring lower than 2.4 V | P | P | P | P | P | P | P | P
+2.2.15 | Inte</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 0 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+Possible delay in backup domain protection
+2.2.17 disabling/enabling after programming the DBP A A A A A A A A
+bit
+2.2.18 PC13 signal transitions disturb LSE N N N N N N N N
+System In some specific cases, DMA2 data corruption
+2.2.19 occurs when managing AHB and APB2 A A A A A A A A
+peripherals in a concurrent way
+Corrupted content of the backup d</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 5 &nbsp;|&nbsp;
+      Page 3 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">A
+frequency
+PVU flag not cleared at low APB clock
+2.8.4 A A A A A A A A
+frequency
+Spurious tamper detection when disabling the
+RTC 2.9.1 N N N N N N N N
+tamper channel
+ES0182 - Rev 18 page 3/46
+
+[TABLE]
+Function | Section | Limitation | Status
+Rev. A | Rev. Z | Rev. 1 | Rev. 2 | Rev. Y | Rev. 4 | Rev. 5 | Rev. 6
+System | 2.2.17 | Possible delay in backup domain protection
+disabling/enabling after programming the DBP
+bit | A | A | A | A | A | A | A | A
+2.2.18 | PC13 signal transitions disturb LS</div>
+</div>
+
+<div class="chunk-block chunk-has-errata">
+  <div class="chunk-header">
+    <span>
+      Chunk 0 &nbsp;|&nbsp;
+      Page 4 &nbsp;|&nbsp;
+      STM32F407_ERRATE.pdf
+    </span>
+    <span>🔴 ERRATA</span>
+  </div>
+  <div class="chunk-text">STM32F405/407xx and STM32F415/417xx
+Summary of device errata
+Status
+Function Section Limitation
+Rev. A Rev. Z Rev. 1 Rev. 2 Rev. Y Rev. 4 Rev. 5 Rev. 6
+2.9.2 RTC calendar registers are not locked properly A A A A A A A A
+RTC interrupt can be masked by another RTC
+2.9.3 A A A A A A A A
+interrupt
+Calendar initialization may fail in case of
+2.9.4 A A A A A A A A
+consecutive INIT mode entry
+RTC
+Alarm flag may be repeatedly set when the
+2.9.5 N N N N N N N N
+core is stopped in debug
+Detection of a ta</div>
+</div>
+
+</body>
+</html>

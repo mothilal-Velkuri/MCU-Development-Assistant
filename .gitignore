@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+.venv/
+venv1/
+
+# API Keys — NEVER commit
+.env
+
+# ChromaDB — large, rebuilt from docs
+chroma_store/
+
+# PDFs — too large for git
+docs/
+
+# Session history — personal
+sessions/
+
+# PyCharm IDE files
+.idea/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Embedding model cache
+*.bin
+*.safetensors
